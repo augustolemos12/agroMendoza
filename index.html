@@ -1,0 +1,1202 @@
+<!DOCTYPE html>
+<html lang="es" class="h-full">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+  <meta name="theme-color" content="#1B5E20"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="description" content="AgroMendoza - Sistema de gestión de turnos de riego y trámites para productores rurales."/>
+
+  <title>AgroMendoza - Riego & Trámites</title>
+
+  <!-- PWA Manifest & Icons -->
+  <link rel="manifest" href="manifest.json"/>
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg"/>
+  <link rel="apple-touch-icon" href="icons/icon.svg"/>
+
+  <!-- Google Fonts: Atkinson Hyperlegible Next (máxima legibilidad bajo luz solar) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;0,800;1,400;1,700&display=swap" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <script>
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            primary: "#1B5E20",
+            "primary-dark": "#0C5216",
+            "primary-light": "#E8F5E9",
+            "on-surface": "#111827",
+            "on-surface-variant": "#374151",
+            "surface-container": "#F3F4F6",
+            "surface-container-low": "#F9FAFB",
+            "danger-dark": "#B91C1C",
+            "danger-light": "#FEF2F2"
+          },
+          fontFamily: {
+            sans: ['"Atkinson Hyperlegible Next"', "-apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Local Base & Offline CSS -->
+  <link rel="stylesheet" href="css/app.css"/>
+</head>
+
+<body class="bg-[#F4F5F7] text-[#111827] antialiased min-h-screen flex flex-col justify-between selection:bg-[#1B5E20] selection:text-white">
+
+  <!-- ========================================== -->
+  <!-- APP HEADER (Adaptado a Celular en 2 Filas) -->
+  <!-- ========================================== -->
+  <header class="bg-white border-b border-[#CBD5E1] w-full px-3.5 py-2 shrink-0 sticky top-0 z-40 shadow-xs">
+    <div class="max-w-[480px] mx-auto flex flex-col gap-1.5">
+      <!-- Fila 1: Marca Institucional y Selector de Rol -->
+      <div class="flex items-center justify-between gap-2">
+        <a href="#mi-riego" class="flex items-center gap-2 text-inherit no-underline min-w-0">
+          <span class="w-8 h-8 rounded-lg bg-[#1B5E20] text-white flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined text-[20px] fill-icon">water_drop</span>
+          </span>
+          <span class="text-lg font-extrabold tracking-tight text-[#111827] truncate">AgroMendoza</span>
+        </a>
+
+        <!-- Selector de Rol (Productor Don Alberto vs Tomero Operador) -->
+        <button onclick="toggleRole()" type="button" class="role-switcher-badge flex items-center gap-1.5 bg-[#E8F5E9] px-3 py-1.5 rounded-full border border-[#C8E6C9] active:scale-95 transition shrink-0" aria-label="Cambiar perfil entre Productor y Tomero">
+          <span class="w-2.5 h-2.5 rounded-full bg-[#2E7D32] shrink-0"></span>
+          <span class="font-bold text-xs text-[#2E7D32] whitespace-nowrap">Don Alberto ▾</span>
+        </button>
+      </div>
+
+      <!-- Fila 2: Barra de Herramientas de Campo (Sincronización + Sol + Tamaño Letra) -->
+      <div class="flex items-center justify-between gap-2 pt-1 border-t border-gray-100">
+        <div class="flex items-center min-w-0">
+          <!-- Bandeja de Sincronización Fuera de Línea -->
+          <button id="sync-tray-badge" onclick="openSyncTray()" type="button" class="hidden flex items-center gap-1.5 bg-amber-100 hover:bg-amber-200 text-amber-950 font-black text-xs px-2.5 py-1 rounded-lg border border-amber-400 sync-pending-badge active:scale-95 transition shadow-2xs" title="Bandeja de sincronización: datos guardados en el teléfono">
+            <span class="material-symbols-outlined text-[16px] text-amber-900">sync</span>
+            <span id="sync-pending-count">2 pendientes</span>
+          </button>
+          <span id="sync-ok-label" class="hidden text-xs font-bold text-[#1B5E20] flex items-center gap-1">
+            <span class="material-symbols-outlined text-[15px] fill-icon">cloud_done</span>
+            <span>Datos al día</span>
+          </span>
+        </div>
+
+        <div class="flex items-center gap-1.5 shrink-0">
+          <!-- Modo Pleno Sol (Ultra Alto Contraste) -->
+          <button id="btn-toggle-sol" onclick="toggleModoSol()" type="button" class="h-8 px-2.5 rounded-lg border border-[#CBD5E1] bg-white text-[#111827] flex items-center gap-1 text-xs font-bold active:scale-95 transition shadow-2xs" title="Modo Pleno Sol (Ultra Alto Contraste)" aria-label="Modo Pleno Sol">
+            <span class="material-symbols-outlined text-[18px]">light_mode</span>
+            <span>Sol</span>
+          </button>
+
+          <!-- Selector Tamaño de Letra (+20%) -->
+          <button id="btn-toggle-texto" onclick="toggleTextoGrande()" type="button" class="h-8 px-2.5 rounded-lg border border-[#CBD5E1] bg-white text-[#111827] flex items-center justify-center font-black text-xs active:scale-95 transition shadow-2xs" title="Aumentar tamaño de letra para lectura de campo" aria-label="Aumentar tamaño de letra">
+            <span id="texto-grande-label">Letra A+</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ============================================================== -->
+  <!-- CONTENEDOR PRINCIPAL DE PANTALLAS (Mobile-First Max 480px)     -->
+  <!-- ============================================================== -->
+  <div class="flex-1 w-full max-w-[480px] mx-auto flex flex-col">
+
+    <!-- ============================================================== -->
+    <!-- PANTALLA 1: MI RIEGO - DON ALBERTO (Modo Campo Accesible)       -->
+    <!-- ============================================================== -->
+    <main id="screen-mi-riego" class="app-screen flex-1 px-3.5 pt-3 pb-28 flex flex-col gap-3">
+      <!-- Indicador de Red y Estado de Hijuela -->
+      <div class="bg-white border border-[#CBD5E1] rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2 shadow-xs">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="w-3 h-3 rounded-full bg-[#2E7D32] ring-2 ring-[#A5D6A7] animate-pulse shrink-0"></span>
+          <span class="font-bold text-sm text-[#111827] leading-snug">Canal Rama Pasco • Flujo Normal</span>
+        </div>
+        <span class="bg-[#F3F4F6] text-[#374151] font-extrabold text-xs px-2.5 py-1 rounded-full border border-[#CBD5E1] shrink-0">Padrón #4022</span>
+      </div>
+
+      <!-- Banner de Incidente Activo si fue reportado -->
+      <div id="mi-riego-active-incident" class="hidden"></div>
+
+      <!-- TARJETA PRINCIPAL: TU PRÓXIMO RIEGO -->
+      <section class="bg-white border-2 border-[#1B5E20] rounded-2xl p-3.5 flex flex-col shadow-sm">
+        <!-- Fila de Cabecera -->
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-[#E2E8F0] pb-2.5">
+          <span class="text-[#1B5E20] font-black text-xs tracking-wider uppercase">TU PRÓXIMO RIEGO</span>
+          <span class="inline-flex items-center gap-1.5 bg-[#E8F5E9] text-[#1B5E20] px-2.5 py-0.5 rounded-full text-xs font-bold border border-[#C8E6C9] shrink-0">
+            <span class="w-2 h-2 rounded-full bg-[#1B5E20]"></span>
+            Confirmado
+          </span>
+        </div>
+
+        <!-- Título de Establecimiento -->
+        <div class="pt-2.5 pb-1">
+          <span class="text-xs font-bold text-[#4B5563] uppercase tracking-wider block">ESTABLECIMIENTO</span>
+          <h2 class="text-lg font-black text-[#111827] tracking-tight uppercase leading-snug">DON ALBERTO GONZÁLEZ</h2>
+        </div>
+
+        <!-- Caja Horario Central Destacada (Alto Contraste para Sol) -->
+        <div class="bg-[#F8F9FA] border border-[#CBD5E1] rounded-xl p-3.5 my-2 text-center flex flex-col gap-1">
+          <span class="text-sm font-extrabold text-[#111827] uppercase tracking-wide">MAÑANA DOMINGO</span>
+          <span class="text-2xl sm:text-3xl font-black text-[#111827] tracking-tight my-0.5">09:00 a 12:30 hs</span>
+          <span class="text-xs font-bold text-[#374151]">3 horas y 30 min de dotación • Caudal 120 L/s</span>
+        </div>
+
+        <!-- Fila de Ubicación de Compuerta -->
+        <div class="flex items-start gap-2.5 py-2 text-[#111827]">
+          <span class="material-symbols-outlined text-[#1B5E20] text-[22px] shrink-0 mt-0.5">location_on</span>
+          <div class="flex flex-col min-w-0">
+            <p class="font-bold text-sm text-[#111827] leading-snug">Hijuela San Martín • Compuerta 4</p>
+            <p class="text-xs text-[#4B5563] leading-snug">Rama Derecha Tunuyán • Cuadro Nacional Parcela 12B</p>
+          </div>
+        </div>
+
+        <!-- Fila de Contacto Directo con el Tomero -->
+        <div class="flex items-center justify-between gap-2 bg-[#F8F9FA] rounded-xl px-3 py-2.5 border border-[#E2E8F0] my-1.5">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="material-symbols-outlined text-[#1B5E20] text-[22px] shrink-0">support_agent</span>
+            <div class="flex flex-col min-w-0">
+              <span class="text-xs text-[#4B5563] leading-tight">Tomero de turno</span>
+              <span class="text-sm font-bold text-[#111827] leading-snug">Carlos Gómez (15 min antes)</span>
+            </div>
+          </div>
+          <a href="tel:+5492615550192" class="w-10 h-10 rounded-lg bg-[#E8F5E9] text-[#1B5E20] border border-[#C8E6C9] flex items-center justify-center hover:bg-[#C8E6C9] active:scale-95 transition shrink-0" aria-label="Llamar al tomero Carlos Gómez">
+            <span class="material-symbols-outlined text-[20px]">call</span>
+          </a>
+        </div>
+
+        <!-- Enlace a Detalles Técnicos de Dotación -->
+        <button onclick="showDetallesDotacion()" type="button" class="mt-1.5 w-full flex items-center justify-between gap-2 rounded-xl border border-[#CBD5E1] hover:border-[#1B5E20] bg-white p-3 text-sm font-bold text-[#111827] text-left transition-colors">
+          <span>Ver detalles de dotación y compuertas</span>
+          <span class="material-symbols-outlined text-[20px] text-[#1B5E20] shrink-0">chevron_right</span>
+        </button>
+
+        <!-- Accesos Directos de Campo: Calendario Turnero y Croquis de Hijuela (Apilados cómodamente en celular) -->
+        <div class="flex flex-col gap-2 mt-2 pt-2 border-t border-gray-100">
+          <a href="#calendario" class="py-2.5 px-3 rounded-xl border-2 border-[#CBD5E1] bg-white text-[#111827] text-sm font-black flex items-center justify-between gap-2 hover:border-[#1B5E20] active:scale-[0.99] transition shadow-xs no-underline">
+            <span class="flex items-center gap-2 min-w-0">
+              <span class="material-symbols-outlined text-[20px] text-[#1B5E20] shrink-0">calendar_month</span>
+              <span>Ver Calendario del Turnero</span>
+            </span>
+            <span class="material-symbols-outlined text-[18px] text-[#64748B] shrink-0">chevron_right</span>
+          </a>
+
+          <a href="#esquema-hijuela" class="py-2.5 px-3 rounded-xl border-2 border-[#CBD5E1] bg-white text-[#111827] text-sm font-black flex items-center justify-between gap-2 hover:border-[#1B5E20] active:scale-[0.99] transition shadow-xs no-underline">
+            <span class="flex items-center gap-2 min-w-0">
+              <span class="material-symbols-outlined text-[20px] text-[#1B5E20] shrink-0">alt_route</span>
+              <span>Ver Croquis de la Hijuela</span>
+            </span>
+            <span class="material-symbols-outlined text-[18px] text-[#64748B] shrink-0">chevron_right</span>
+          </a>
+        </div>
+      </section>
+
+      <!-- BOTÓN DE ACCIÓN CRÍTICA: INFORMAR PROBLEMA CON EL AGUA -->
+      <div class="flex flex-col gap-1.5 pt-1">
+        <a href="#reportar" class="w-full min-h-[54px] bg-white text-[#D32F2F] border-2 border-[#D32F2F] rounded-xl px-3.5 py-2.5 flex items-center justify-center gap-2 font-extrabold text-sm sm:text-base text-center active:bg-[#FFEBEE] transition-none shadow-xs no-underline">
+          <span class="material-symbols-outlined text-[22px] shrink-0">warning</span>
+          <span>INFORMAR PROBLEMA CON EL AGUA</span>
+        </a>
+        <p class="text-center text-xs text-[#4B5563] font-medium">
+          Aviso directo e inmediato a la guardia de la Inspección de Cauce
+        </p>
+      </div>
+    </main>
+
+    <!-- ============================================================== -->
+    <!-- PANTALLA 2: MENÚ DE TRÁMITES - AGROMENDOZA                     -->
+    <!-- ============================================================== -->
+    <main id="screen-tramites" class="app-screen hidden flex-1 px-3.5 pt-3 pb-28 flex flex-col justify-between">
+      <div>
+        <!-- Barra de Contexto Superior -->
+        <div class="px-3.5 py-2.5 bg-white border border-[#CBD5E1] rounded-xl flex flex-wrap items-center justify-between gap-2 mb-3 shadow-xs">
+          <p class="text-xs font-bold text-[#111827]">
+            Padrón #4022 • Inspección Rama Pasco
+          </p>
+          <span class="text-xs font-bold bg-[#E8F5E9] text-[#1B5E20] px-2 py-0.5 rounded-md border border-[#C8E6C9] shrink-0">Al Día</span>
+        </div>
+
+        <h2 class="text-lg font-black text-[#111827] tracking-tight mb-2 px-1">
+          Trámites y Gestiones de Cauce
+        </h2>
+
+        <!-- Listado de Botones de Trámite -->
+        <nav aria-label="Lista de trámites" class="flex flex-col gap-2.5">
+          <!-- 1. Mis Fincas y Padrones -->
+          <button onclick="showToast('Padrón Nº 4022 • 18.5 Hectáreas totales registradas en Cuadro Nacional.');" type="button" class="min-h-[58px] px-4 py-3 bg-white border border-[#CBD5E1] rounded-xl flex items-center justify-between text-[#111827] font-bold text-base shadow-xs hover:border-[#1B5E20] active:bg-[#F8FAFC]">
+            <span class="text-left leading-snug">Mis Fincas y Padrones de Riego</span>
+            <span class="material-symbols-outlined text-[#64748B] text-[24px] ml-2 shrink-0">chevron_right</span>
+          </button>
+
+          <!-- 2. Renovar Declaración RUT Anual -->
+          <a href="#rut" class="min-h-[58px] px-4 py-3 bg-white border-2 border-[#1B5E20] rounded-xl flex items-center justify-between text-[#111827] font-bold text-base shadow-xs hover:bg-[#F0FDF4] active:bg-[#E8F5E9] no-underline">
+            <div class="flex items-center gap-2">
+              <span class="text-left leading-snug">Renovar Declaración RUT Anual</span>
+            </div>
+            <div class="flex items-center gap-1.5 shrink-0">
+              <span class="text-xs font-extrabold bg-amber-100 text-amber-900 border border-amber-300 px-2 py-0.5 rounded-full">Express</span>
+              <span class="material-symbols-outlined text-[#1B5E20] text-[24px]">chevron_right</span>
+            </div>
+          </a>
+
+          <!-- 3. Descargar Comprobantes y Constancias -->
+          <button onclick="showToast('Generando constancia de libre deuda y padrón activo en PDF...');" type="button" class="min-h-[58px] px-4 py-3 bg-white border border-[#CBD5E1] rounded-xl flex items-center justify-between text-[#111827] font-bold text-base shadow-xs hover:border-[#1B5E20] active:bg-[#F8FAFC]">
+            <span class="text-left leading-snug">Descargar Comprobantes y Constancias</span>
+            <span class="material-symbols-outlined text-[#64748B] text-[24px] ml-2 shrink-0">chevron_right</span>
+          </button>
+
+          <!-- 4. Pago de Canon DGI / ATM -->
+          <button onclick="showToast('Estado de Cuenta: Cuota 11 al día. Próximo vencimiento: 20 de Diciembre.');" type="button" class="min-h-[58px] px-4 py-3 bg-white border border-[#CBD5E1] rounded-xl flex items-center justify-between text-[#111827] font-bold text-base shadow-xs hover:border-[#1B5E20] active:bg-[#F8FAFC]">
+            <span class="text-left leading-snug">Pago de Canon DGI / ATM</span>
+            <span class="material-symbols-outlined text-[#64748B] text-[24px] ml-2 shrink-0">chevron_right</span>
+          </button>
+
+          <!-- 5. Centros de Atención y Gestores -->
+          <button onclick="showToast('Subdelegación Río Mendoza / Tunuyán: Lunes a Viernes de 07:30 a 13:00 hs.');" type="button" class="min-h-[58px] px-4 py-3 bg-white border border-[#CBD5E1] rounded-xl flex items-center justify-between text-[#111827] font-bold text-base shadow-xs hover:border-[#1B5E20] active:bg-[#F8FAFC]">
+            <span class="text-left leading-snug">Centros de Atención y Gestores</span>
+            <span class="material-symbols-outlined text-[#64748B] text-[24px] ml-2 shrink-0">chevron_right</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Pie con botón de guardia oficial -->
+      <div class="mt-6 pt-2">
+        <a href="tel:080033374346" class="w-full min-h-[56px] bg-white border-2 border-[#1B5E20] text-[#1B5E20] active:bg-[#1B5E20] active:text-white rounded-xl flex items-center justify-center gap-2 font-extrabold text-base shadow-xs no-underline">
+          <span class="material-symbols-outlined text-[24px]">call</span>
+          <span>Llamar a la Inspección de Cauce</span>
+        </a>
+        <p class="text-center text-xs text-[#64748B] mt-2 font-medium">
+          Departamento General de Irrigación • Mendoza
+        </p>
+      </div>
+    </main>
+
+    <!-- ============================================================== -->
+    <!-- PANTALLA 3: REPORTAR PROBLEMA CON EL AGUA (Aviso al Tomero)    -->
+    <!-- ============================================================== -->
+    <main id="screen-reportar" class="app-screen hidden flex-1 px-3.5 pt-3 pb-28 flex flex-col justify-between">
+      <div>
+        <!-- Barra de Paso y Estado -->
+        <div class="bg-white px-3 py-2 rounded-xl border border-[#CBD5E1] flex flex-wrap justify-between items-center gap-2 mb-3 shadow-xs">
+          <a href="#mi-riego" class="inline-flex items-center gap-1 font-bold text-xs text-[#111827] bg-[#F3F4F6] px-2.5 py-1.5 rounded-lg border border-[#CBD5E1] no-underline shrink-0">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            <span>Volver</span>
+          </a>
+          <span class="inline-flex items-center gap-1 font-extrabold text-xs text-[#1B5E20] bg-[#E8F5E9] px-2.5 py-1 rounded-full border border-[#C8E6C9]">
+            <span class="material-symbols-outlined text-[15px]">verified</span>
+            <span>Hijuela San Martín</span>
+          </span>
+        </div>
+
+        <!-- Instrucción Directa -->
+        <div class="mb-3">
+          <h2 class="text-lg font-black text-[#111827] leading-tight">
+            Seleccione lo que ocurrió en su hijuela:
+          </h2>
+          <p class="text-xs text-[#4B5563] mt-0.5">
+            El aviso llega al celular del tomero asignado Carlos Gómez.
+          </p>
+        </div>
+
+        <!-- Formulario de Incidentes -->
+        <form id="water-report-form" class="flex flex-col gap-2.5">
+          <!-- Opción 1: No llegó el agua -->
+          <label for="inc-1" class="incident-option-card cursor-pointer bg-white border-2 border-[#CBD5E1] rounded-2xl p-3.5 flex items-start gap-3 hover:border-[#1B5E20] transition-all shadow-xs">
+            <input type="radio" id="inc-1" name="incident_type" value="sin_agua" class="w-5 h-5 mt-0.5 text-[#1B5E20] focus:ring-[#1B5E20] shrink-0"/>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-start gap-1.5 mb-0.5">
+                <span class="material-symbols-outlined text-[#B91C1C] text-[20px] shrink-0 mt-0.5">block</span>
+                <span class="font-extrabold text-[#111827] text-sm sm:text-base leading-snug">No llegó el agua a mi compuerta</span>
+              </div>
+              <p class="text-xs text-[#4B5563] leading-snug">La dotación programada de las 09:00 hs no ingresó al lote</p>
+            </div>
+          </label>
+
+          <!-- Opción 2: Canal roto o desbordado -->
+          <label for="inc-2" class="incident-option-card cursor-pointer bg-[#E8F5E9] border-2 border-[#1B5E20] rounded-2xl p-3.5 flex items-start gap-3 transition-all shadow-xs">
+            <input type="radio" id="inc-2" name="incident_type" value="canal_roto" checked class="w-5 h-5 mt-0.5 text-[#1B5E20] focus:ring-[#1B5E20] shrink-0"/>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-start gap-1.5 mb-0.5">
+                <span class="material-symbols-outlined text-[#1B5E20] text-[20px] shrink-0 fill-icon mt-0.5">water_drop</span>
+                <span class="font-extrabold text-[#1B5E20] text-sm sm:text-base leading-snug">Canal roto o desbordado</span>
+              </div>
+              <p class="text-xs text-[#111827] leading-snug">Pérdida de caudal o rotura en el tramo de la hijuela</p>
+            </div>
+          </label>
+
+          <!-- Opción 3: Corte anticipado -->
+          <label for="inc-3" class="incident-option-card cursor-pointer bg-white border-2 border-[#CBD5E1] rounded-2xl p-3.5 flex items-start gap-3 hover:border-[#1B5E20] transition-all shadow-xs">
+            <input type="radio" id="inc-3" name="incident_type" value="corte_anticipado" class="w-5 h-5 mt-0.5 text-[#1B5E20] focus:ring-[#1B5E20] shrink-0"/>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-start gap-1.5 mb-0.5">
+                <span class="material-symbols-outlined text-[#111827] text-[20px] shrink-0 mt-0.5">hourglass_bottom</span>
+                <span class="font-extrabold text-[#111827] text-sm sm:text-base leading-snug">Cortaron el agua antes de hora</span>
+              </div>
+              <p class="text-xs text-[#4B5563] leading-snug">Menos horas de dotación que las asignadas reglamentarias</p>
+            </div>
+          </label>
+
+          <!-- Nota de Voz para el Tomero (Manos con tierra / Guantes) -->
+          <div class="flex flex-col gap-1.5">
+            <button type="button" id="audio-rec-btn" onclick="toggleAudioRecording()" class="w-full min-h-[54px] px-3.5 py-2.5 rounded-2xl border-2 border-[#CBD5E1] bg-white flex items-center justify-between gap-2 font-bold text-sm text-[#111827] hover:bg-[#F8FAFC] active:scale-[0.99] transition shadow-xs">
+              <div class="flex items-center gap-2 min-w-0">
+                <span id="audio-rec-icon" class="material-symbols-outlined text-[22px] text-[#B91C1C] shrink-0">mic</span>
+                <span id="audio-rec-label" class="text-left leading-snug">Grabar nota de voz (Opcional)</span>
+              </div>
+              <span id="audio-timer" class="hidden text-xs font-black bg-red-100 text-red-700 px-2.5 py-1 rounded-full border border-red-300 shrink-0">00:00</span>
+            </button>
+
+            <!-- Previsualización y Reproducción del Audio Grabado -->
+            <div id="audio-preview-container" class="hidden w-full min-h-[54px] px-3 py-2.5 rounded-2xl bg-[#E8F5E9] border-2 border-[#1B5E20] flex items-center justify-between gap-2 shadow-xs">
+              <div class="flex items-center gap-2.5 min-w-0">
+                <button type="button" onclick="playRecordedAudio()" class="w-10 h-10 rounded-full bg-[#1B5E20] text-white flex items-center justify-center shadow-xs active:scale-95 transition shrink-0" aria-label="Reproducir audio grabado">
+                  <span id="audio-play-icon" class="material-symbols-outlined text-[22px] fill-icon">play_arrow</span>
+                </button>
+                <div class="flex flex-col min-w-0">
+                  <span id="audio-preview-duration" class="font-extrabold text-sm text-[#111827]">Nota de voz lista</span>
+                  <span class="text-xs text-[#1B5E20] font-bold">Se enviará adjunta al tomero</span>
+                </div>
+              </div>
+              <button type="button" onclick="deleteRecordedAudio()" class="w-9 h-9 rounded-lg bg-white border border-[#CBD5E1] text-[#B91C1C] flex items-center justify-center font-bold text-base hover:bg-red-50 active:scale-95 transition shrink-0" title="Borrar y regrabar audio" aria-label="Borrar audio">
+                <span class="material-symbols-outlined text-[20px]">delete</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Adjuntar Foto del Canal con Cámara del Teléfono -->
+          <input type="file" id="photo-input" accept="image/*" capture="environment" class="hidden"/>
+          <button type="button" id="camera-btn" class="w-full min-h-[52px] p-3 rounded-2xl border-2 border-dashed border-[#94A3B8] bg-white flex items-center justify-center gap-2 font-bold text-sm text-[#111827] hover:bg-[#F8FAFC] active:bg-[#F1F5F9] shadow-xs">
+            <span class="material-symbols-outlined text-[22px] text-[#475569] shrink-0">photo_camera</span>
+            <span>Sacar foto del canal (Opcional)</span>
+          </button>
+          <div id="photo-confirmation" class="hidden text-center font-bold text-xs text-[#1B5E20] bg-[#E8F5E9] py-1.5 px-3 rounded-lg border border-[#A5D6A7]">
+            ✓ 1 foto adjunta lista para enviar
+          </div>
+
+          <!-- Botón de Envío -->
+          <div class="pt-1">
+            <button type="submit" class="w-full min-h-[54px] bg-[#1B5E20] hover:bg-[#144918] active:bg-[#0E3311] text-white rounded-xl flex items-center justify-center gap-2 transition font-extrabold text-base tracking-wide shadow-sm cursor-pointer">
+              <span class="material-symbols-outlined text-[22px] shrink-0">send</span>
+              <span>ENVIAR AVISO AL TOMERO</span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Garantía Offline para Campo -->
+      <div class="mt-4 bg-white border border-[#CBD5E1] rounded-xl p-3 flex items-center gap-2.5 shadow-xs">
+        <span class="material-symbols-outlined text-[#1B5E20] text-[22px] shrink-0 fill-icon">wifi_off</span>
+        <p class="text-xs text-[#111827] font-medium leading-snug">
+          <strong>Garantía de Campo:</strong> Si está sin señal en la hijuela, el aviso se guarda en su teléfono y se transmite ni bien detecte conexión.
+        </p>
+      </div>
+    </main>
+
+    <!-- ============================================================== -->
+    <!-- PANTALLA 4: MODO CAMPO - TURNO ACTUAL (TOMERO #884)            -->
+    <!-- ============================================================== -->
+    <main id="screen-modo-tomero" class="app-screen hidden flex-1 px-3.5 pt-3 pb-28 flex flex-col justify-between">
+      <div>
+        <!-- Pill de Turno y Estado Offline -->
+        <div class="border border-[#CBD5E1] bg-white rounded-2xl p-3 flex flex-wrap items-center justify-between gap-2 mb-3 shadow-xs">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-3 h-3 rounded-full bg-amber-500 ring-2 ring-amber-200 animate-pulse shrink-0"></span>
+            <div class="min-w-0">
+              <p class="font-extrabold text-sm text-[#111827] leading-tight">Modo Campo Operador</p>
+              <p class="text-xs text-[#64748B] leading-tight">Inspección Río Tunuyán Inferior</p>
+            </div>
+          </div>
+          <span id="tomero-turno-total" class="bg-[#F3F4F6] text-[#111827] text-xs font-extrabold px-2.5 py-1 rounded-full border border-[#CBD5E1] shrink-0">
+            Turno #2 de 6
+          </span>
+        </div>
+
+        <!-- TARJETA DE TURNO EN CURSO -->
+        <section class="bg-white rounded-2xl border-2 border-[#1B5E20] p-3.5 shadow-xs space-y-2.5">
+          <!-- Cabecera -->
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 pb-2">
+            <span id="tomero-turno-num" class="text-[#1B5E20] text-xs font-extrabold tracking-wider uppercase">TURNO ACTUAL (2 DE 6)</span>
+            <span class="bg-[#E8F5E9] text-[#1B5E20] px-2.5 py-0.5 rounded-full text-xs font-extrabold inline-flex items-center gap-1 border border-[#C8E6C9] shrink-0">
+              <span class="material-symbols-outlined text-[14px] fill-icon">radio_button_checked</span>
+              <span>En Curso</span>
+            </span>
+          </div>
+
+          <!-- Titular y Finca -->
+          <div>
+            <p class="text-xs uppercase font-bold text-[#64748B] tracking-wider">Titular Registrado</p>
+            <h2 id="tomero-finca-nombre" class="text-xl sm:text-2xl font-black text-[#111827] tracking-tight uppercase leading-snug">
+              FINCA GONZÁLEZ
+            </h2>
+            <p id="tomero-finca-titular" class="text-xs font-extrabold text-[#1B5E20]">Alberto González</p>
+          </div>
+
+          <!-- Recuadro Horario y Dotación -->
+          <div class="bg-[#F8F9FA] border border-[#CBD5E1] rounded-xl p-3 text-center">
+            <span id="tomero-finca-horario" class="text-2xl sm:text-3xl font-black text-[#111827] block tracking-tight">10:00 a 13:00 hs</span>
+            <p id="tomero-finca-padron" class="text-xs font-bold text-[#374151] mt-0.5">Padrón 4022 • 3 horas de dotación</p>
+          </div>
+
+          <!-- Compuerta y Rama -->
+          <div class="flex items-start gap-2 pt-0.5">
+            <span class="material-symbols-outlined text-[#1B5E20] text-[22px] shrink-0 mt-0.5">location_on</span>
+            <div class="min-w-0">
+              <p id="tomero-finca-compuerta" class="font-extrabold text-[#111827] text-sm leading-snug">Compuerta 2 • Hijuela Oeste</p>
+              <p class="text-xs text-[#64748B] leading-snug">Desvío secundario habilitado</p>
+            </div>
+          </div>
+
+          <!-- Ver lista completa de turnos -->
+          <button onclick="showTomeroListaTurnos()" type="button" class="w-full py-2.5 px-3 rounded-xl border border-[#CBD5E1] bg-white text-[#111827] text-xs font-extrabold flex items-center justify-between gap-2 text-left hover:bg-gray-50 active:bg-gray-100 transition-none">
+            <span>Ver planilla completa de turnos del día</span>
+            <span class="material-symbols-outlined text-[18px] text-[#64748B] shrink-0">chevron_right</span>
+          </button>
+
+          <!-- Ver Croquis / Esquema Lineal de la Hijuela -->
+          <a href="#esquema-hijuela" class="w-full py-2.5 px-3 rounded-xl border-2 border-[#1B5E20] bg-[#E8F5E9] text-[#1B5E20] text-xs font-black flex items-center justify-between gap-2 hover:bg-green-100 active:scale-[0.99] transition no-underline">
+            <span class="flex items-center gap-1.5 min-w-0">
+              <span class="material-symbols-outlined text-[18px] shrink-0">alt_route</span>
+              <span class="leading-snug">Croquis de Compuertas en Vivo (1 a 6)</span>
+            </span>
+            <span class="material-symbols-outlined text-[18px] shrink-0">chevron_right</span>
+          </a>
+        </section>
+
+        <!-- BOTONES DE ACCIÓN PARA EL TOMERO EN CAMPO -->
+        <div class="flex flex-col gap-2.5 pt-3">
+          <!-- Botón 1: Agua Entregada (Verde Grande) -->
+          <button onclick="marcarAguaEntregada()" type="button" class="bg-[#1B5E20] hover:bg-[#144918] active:bg-[#0E3311] text-white font-extrabold text-base min-h-[54px] px-3 rounded-xl flex items-center justify-center gap-2 shadow-sm active:scale-[0.99] transition w-full cursor-pointer">
+            <span class="material-symbols-outlined text-[22px] fill-icon shrink-0">check_circle</span>
+            <span class="tracking-wide uppercase">AGUA ENTREGADA</span>
+          </button>
+
+          <!-- Botón 2: No Recibió / Ausente -->
+          <button onclick="marcarNoRecibio()" type="button" class="bg-white border-2 border-[#D32F2F] text-[#D32F2F] font-extrabold text-base min-h-[52px] px-3 rounded-xl flex items-center justify-center gap-2 hover:bg-red-50 active:scale-[0.99] transition w-full cursor-pointer">
+            <span class="material-symbols-outlined text-[22px] shrink-0">cancel</span>
+            <span class="tracking-wide uppercase">No Recibió / Ausente</span>
+          </button>
+
+          <!-- Botón 3: Reportar Rotura en Canal (Simulado) -->
+          <button onclick="simularReporteRoturaTomero()" type="button" class="bg-amber-50 border-2 border-amber-600 text-amber-950 font-extrabold text-xs sm:text-sm min-h-[50px] px-3 rounded-xl flex items-center justify-center gap-2 hover:bg-amber-100 active:scale-[0.99] transition w-full cursor-pointer">
+            <span class="material-symbols-outlined text-[20px] text-amber-800 shrink-0">report_problem</span>
+            <span class="tracking-wide uppercase text-center leading-snug">Reportar Rotura en Canal (Simulado)</span>
+          </button>
+
+          <!-- Confirmación de simulación de rotura -->
+          <div id="tomero-rotura-simulada-box" class="hidden p-3 rounded-xl border-2 border-red-600 bg-red-50"></div>
+        </div>
+      </div>
+
+      <!-- Leyenda de Funcionamiento Fuera de Línea -->
+      <div class="mt-4 text-center">
+        <p class="text-xs text-[#64748B] font-medium flex items-center justify-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px] shrink-0">offline_pin</span>
+          <span>Los toques se guardan en el teléfono y sincronizan en la seccional.</span>
+        </p>
+      </div>
+    </main>
+
+    <!-- ============================================================== -->
+    <!-- PANTALLA 5: RENOVACIÓN RUT EXPRESS - AGROMENDOZA (ETAPA 1)     -->
+    <!-- ============================================================== -->
+    <main id="screen-rut" class="app-screen hidden flex-1 px-3.5 pt-3 pb-28 flex flex-col justify-between">
+      <div>
+        <!-- Barra Superior con Botón Volver y Estado del Trámite -->
+        <div class="bg-white px-3 py-2 rounded-xl border border-[#CBD5E1] flex flex-wrap justify-between items-center gap-2 mb-3 shadow-xs">
+          <a href="#tramites" class="inline-flex items-center gap-1 font-bold text-xs text-[#111827] bg-[#F3F4F6] px-2.5 py-1.5 rounded-lg border border-[#CBD5E1] no-underline shrink-0">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            <span>Volver a Trámites</span>
+          </a>
+          <span id="rut-status-badge" class="bg-amber-100 text-amber-900 border border-amber-300 px-2.5 py-0.5 rounded-full text-xs font-bold flex items-center gap-1 shrink-0">
+            <span class="material-symbols-outlined text-[14px]">schedule</span>
+            <span>Pendiente Campaña 2026</span>
+          </span>
+        </div>
+
+        <!-- Identidad Federada del Productor (Once-Only por CUIT) -->
+        <div class="bg-white border border-[#CBD5E1] rounded-xl p-3 mb-3 flex flex-wrap items-center justify-between gap-2 shadow-2xs">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="material-symbols-outlined text-[#1B5E20] text-[22px] shrink-0 fill-icon">badge</span>
+            <div class="min-w-0">
+              <p class="text-xs font-extrabold text-[#111827] leading-tight">Titular: Alberto González • CUIT 20-14892301-4</p>
+              <p class="text-[11px] text-[#4B5563] leading-tight">Identidad validada (Mi Argentina / ARCA) • Legajo SIA-RUT #MZA-084192</p>
+            </div>
+          </div>
+          <span class="text-[11px] font-black bg-[#E8F5E9] text-[#1B5E20] px-2 py-0.5 rounded border border-[#C8E6C9] shrink-0">
+            Once-Only (Ley 9625)
+          </span>
+        </div>
+
+        <!-- Tarjeta Principal de Declaración Jurada RUT -->
+        <section class="bg-white rounded-2xl border-2 border-[#1B5E20] p-3.5 flex flex-col gap-3 shadow-xs">
+          <div class="flex flex-wrap items-center justify-between gap-2 border-b border-gray-100 pb-2">
+            <span class="text-xs font-extrabold text-[#1B5E20] uppercase tracking-wider">CONCILIACIÓN AUTOMÁTICA DGI + ATM</span>
+            <span class="text-xs font-extrabold text-[#64748B]">Padrón DGI #4022</span>
+          </div>
+
+          <!-- Establecimiento y Nomenclatura Catastral de 21 dígitos precargada -->
+          <div>
+            <span class="text-xs font-bold text-[#64748B] uppercase block">ESTABLECIMIENTO PRODUCTIVO</span>
+            <h2 id="rut-finca-titulo" class="text-xl font-black text-[#111827] tracking-tight uppercase leading-snug">
+              FINCA LOS ÁLAMOS (PARCELA 12B)
+            </h2>
+            <p class="text-xs font-bold text-[#374151] mt-0.5">
+              Nomenclatura Catastral ATM (21 díg.): <span class="font-mono text-[#111827]">06-99-04-2819-000012-0000-3</span>
+            </p>
+          </div>
+
+          <!-- TARJETA INTERACTIVA DE LA PARCELA (Presionar para abrir vista detallada) -->
+          <div class="bg-[#F8F9FA] rounded-xl border border-[#CBD5E1] p-3 flex flex-col gap-2.5">
+            <div class="flex flex-wrap items-center justify-between gap-2">
+              <div class="flex items-center gap-2 text-[#111827] min-w-0">
+                <span class="material-symbols-outlined text-[#1B5E20] text-[22px] shrink-0">agriculture</span>
+                <p id="rut-resumen-cultivo" class="text-sm sm:text-base font-extrabold text-[#111827] leading-snug">
+                  4.5 ha Totales • 4.0 ha Vid Malbec
+                </p>
+              </div>
+              <span class="text-[11px] font-extrabold bg-[#E8F5E9] text-[#1B5E20] px-2 py-0.5 rounded-md border border-[#C8E6C9] shrink-0">
+                Precarga Catastral
+              </span>
+            </div>
+
+            <div class="grid grid-cols-2 gap-1.5 text-xs bg-white p-2 rounded-lg border border-gray-200">
+              <div><span class="text-gray-500">Derecho DGI:</span> <strong id="rut-resumen-riego" class="text-[#111827]">Superficial Definitivo</strong></div>
+              <div><span class="text-gray-500">Protección:</span> <strong id="rut-resumen-malla" class="text-[#1B5E20]">Malla en Cuartel 1 (2.5 ha)</strong></div>
+            </div>
+
+            <!-- Botón Táctil del Polígono de la Parcela (Abre Vista Detallada de Cuarteles) -->
+            <button onclick="openDetalleParcelaRUT()" type="button" class="w-full text-left bg-white hover:bg-[#F0FDF4] active:scale-[0.99] transition rounded-xl border-2 border-[#1B5E20] p-2.5 flex items-center gap-3 shadow-xs cursor-pointer" aria-label="Ver plano detallado de la parcela y cuarteles">
+              <svg viewBox="0 0 110 76" class="w-20 h-14 shrink-0 rounded-lg bg-[#E8F5E9] border border-[#A5D6A7]">
+                <!-- Canal Hijuela San Martín al norte -->
+                <line x1="4" y1="10" x2="106" y2="14" stroke="#0284C7" stroke-width="3.5" stroke-dasharray="4,2"/>
+                <!-- Cuartel 1 Norte (2.5 ha) -->
+                <polygon points="16,16 92,20 88,42 18,39" fill="#86EFAC" stroke="#1B5E20" stroke-width="2"/>
+                <!-- Cuartel 2 Sur (1.5 ha) -->
+                <polygon points="18,39 88,42 82,64 20,61" fill="#BBF7D0" stroke="#1B5E20" stroke-width="2"/>
+                <!-- Vértices georreferenciados -->
+                <circle cx="16" cy="16" r="3" fill="#1B5E20"/>
+                <circle cx="92" cy="20" r="3" fill="#1B5E20"/>
+                <circle cx="82" cy="64" r="3" fill="#1B5E20"/>
+                <circle cx="20" cy="61" r="3" fill="#1B5E20"/>
+                <!-- Compuerta 4 -->
+                <circle cx="54" cy="12" r="4" fill="#0284C7" stroke="#FFFFFF" stroke-width="1.5"/>
+              </svg>
+              <div class="flex-1 min-w-0">
+                <div class="flex items-center justify-between gap-1">
+                  <span class="text-xs font-black text-[#1B5E20] uppercase">Tocar para ampliar parcela</span>
+                  <span class="material-symbols-outlined text-[18px] text-[#1B5E20] shrink-0">zoom_in</span>
+                </div>
+                <p class="text-xs font-extrabold text-[#111827] leading-snug mt-0.5">
+                  Ver Plano de Cuarteles (C1 y C2), Vértices GPS y Toma C-4
+                </p>
+                <span class="text-[11px] text-[#4B5563] leading-snug block">
+                  Polígono GIS recuperado de ATM • Sin dibujo manual
+                </span>
+              </div>
+            </button>
+          </div>
+
+          <!-- Sello de Beneficios Legales y Contingencias Climáticas -->
+          <div class="bg-amber-50/80 border border-amber-300 rounded-xl p-2.5 flex items-start gap-2">
+            <span class="material-symbols-outlined text-[20px] text-amber-800 shrink-0 mt-0.5 fill-icon">verified_user</span>
+            <p class="text-xs text-[#111827] leading-snug">
+              <strong>Cobertura Climática y Comercialización:</strong> Mantener el RUT vigente habilita tasación ante <strong>Heladas y Granizo</strong> (Fondo Compensador Agrícola - Ley 9083), ingreso de uva y beneficios de canon DGI.
+            </p>
+          </div>
+
+          <!-- Pregunta Clave de Usabilidad: Validación en 1 Toque -->
+          <div class="pt-1 border-t border-gray-100">
+            <h3 class="text-base font-extrabold text-[#111827] leading-snug">
+              ¿Confirma estos datos para la Campaña 2026/2027?
+            </h3>
+            <p class="text-xs text-[#4B5563] mt-0.5 leading-snug">
+              Si mantiene la misma superficie y cultivo, firme con un solo toque. Si hubo cambios en algún cuartel, actualícelos abajo antes de firmar.
+            </p>
+          </div>
+
+          <!-- Caja de Éxito y acceso a Cédula Digital cuando ya se firmó -->
+          <div id="rut-success-box" class="hidden"></div>
+
+          <!-- Botones de Acción -->
+          <div class="flex flex-col gap-2 pt-1">
+            <!-- Botón Principal: Confirmar y Firmar -->
+            <button id="btn-confirmar-rut" onclick="confirmarRUT()" type="button" class="w-full min-h-[54px] bg-[#1B5E20] hover:bg-[#144918] active:bg-[#0E3311] text-white rounded-xl flex items-center justify-center gap-2 text-base font-extrabold cursor-pointer transition shadow-xs px-3">
+              <span class="material-symbols-outlined text-[22px] fill-icon shrink-0">draw</span>
+              <span>SÍ, CONFIRMAR Y FIRMAR RUT 2026</span>
+            </button>
+
+            <!-- Botón Secundario: Declarar cambio de cultivo / malla / riego -->
+            <button id="btn-modificar-rut" onclick="openModificarRUTModal()" type="button" class="w-full min-h-[48px] bg-white hover:bg-gray-50 active:bg-gray-100 text-[#111827] border-2 border-[#CBD5E1] rounded-xl flex items-center justify-center gap-2 text-xs sm:text-sm font-extrabold cursor-pointer transition px-3">
+              <span class="material-symbols-outlined text-[20px] text-[#1B5E20] shrink-0">edit_note</span>
+              <span>Declarar cambio de cultivo, malla o riego</span>
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <!-- Pie Legal -->
+      <div class="mt-4 pt-2">
+        <p class="text-xs text-[#64748B] text-center leading-snug">
+          Declaración Jurada oficial integrada bajo Ley Provincial 9625 (EDI / Once-Only), Ley Nacional 25.506 (Firma Digital) y Ley General de Aguas.
+        </p>
+      </div>
+    </main>
+
+    <!-- ============================================================== -->
+    <!-- PANTALLA 6: CALENDARIO DEL TURNERO (Vista Quincenal / Mensual) -->
+    <!-- ============================================================== -->
+    <main id="screen-calendario" class="app-screen hidden flex-1 px-3.5 pt-3 pb-28 flex flex-col justify-between">
+      <div>
+        <!-- Barra Superior con Botón Volver -->
+        <div class="bg-white px-3 py-2 rounded-xl border border-[#CBD5E1] flex flex-wrap justify-between items-center gap-2 mb-3 shadow-xs">
+          <a href="#mi-riego" class="inline-flex items-center gap-1 font-bold text-xs text-[#111827] bg-[#F3F4F6] px-2.5 py-1.5 rounded-lg border border-[#CBD5E1] no-underline shrink-0">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            <span>Volver</span>
+          </a>
+          <span class="font-extrabold text-xs text-[#1B5E20] bg-[#E8F5E9] px-2.5 py-1 rounded-full border border-[#C8E6C9]">
+            Padrón #4022 • Hijuela San Martín
+          </span>
+        </div>
+
+        <!-- Título y Subtítulo -->
+        <div class="mb-3">
+          <h2 class="text-lg font-black text-[#111827] tracking-tight leading-tight">
+            Calendario Oficial del Turnero
+          </h2>
+          <p class="text-xs text-[#4B5563] mt-0.5">
+            Cronograma de dotación de agua fijado por la Inspección de Cauce Rama Pasco.
+          </p>
+        </div>
+
+        <!-- Selector Quincenal vs Mensual -->
+        <div class="bg-white p-1 rounded-xl border border-[#CBD5E1] flex gap-1 mb-3 shadow-xs">
+          <button id="btn-cal-quincenal" onclick="setFiltroCalendario('quincenal')" type="button" class="flex-1 py-2 px-2 rounded-lg font-black text-xs bg-[#1B5E20] text-white transition">
+            Quincenal (Nov)
+          </button>
+          <button id="btn-cal-mensual" onclick="setFiltroCalendario('mensual')" type="button" class="flex-1 py-2 px-2 rounded-lg font-bold text-xs bg-white text-[#111827] border border-[#CBD5E1] transition">
+            Mensual (Nov - Dic)
+          </button>
+        </div>
+
+        <!-- Estadísticas Resumen Rápidas -->
+        <div class="grid grid-cols-3 gap-2 mb-3 text-center">
+          <div class="bg-white p-2 rounded-xl border border-[#CBD5E1] shadow-2xs">
+            <span class="text-[11px] font-bold text-gray-500 uppercase block">Riegos</span>
+            <span class="text-base font-black text-[#111827]">3 turnos</span>
+          </div>
+          <div class="bg-white p-2 rounded-xl border border-[#CBD5E1] shadow-2xs">
+            <span class="text-[11px] font-bold text-gray-500 uppercase block">Horas</span>
+            <span class="text-base font-black text-[#1B5E20]">10.5 hs</span>
+          </div>
+          <div class="bg-white p-2 rounded-xl border border-[#CBD5E1] shadow-2xs">
+            <span class="text-[11px] font-bold text-gray-500 uppercase block">Corta</span>
+            <span class="text-base font-black text-red-700">25 al 27</span>
+          </div>
+        </div>
+
+        <!-- Lista Dinámica de Turnos -->
+        <div id="calendario-turnos-list" class="flex flex-col gap-3">
+          <!-- Renderizado dinámicamente por app.js -->
+        </div>
+      </div>
+
+      <!-- Pie con botón de descarga o guardado -->
+      <div class="mt-4 pt-2">
+        <button onclick="showToast('✓ Cronograma oficial de riego descargado en PDF para consulta offline.');" type="button" class="w-full min-h-[50px] bg-white border-2 border-[#1B5E20] text-[#1B5E20] hover:bg-green-50 active:bg-green-100 rounded-xl flex items-center justify-center gap-2 font-black text-sm shadow-xs transition cursor-pointer">
+          <span class="material-symbols-outlined text-[20px] shrink-0">download</span>
+          <span>Descargar Planilla Oficial en PDF</span>
+        </button>
+      </div>
+    </main>
+
+    <!-- ============================================================== -->
+    <!-- PANTALLA 7: ESQUEMA LINEAL DE LA HIJUELA (Croquis de Compuertas)-->
+    <!-- ============================================================== -->
+    <main id="screen-esquema-hijuela" class="app-screen hidden flex-1 px-3.5 pt-3 pb-28 flex flex-col justify-between">
+      <div>
+        <!-- Barra Superior con Botón Volver según Rol -->
+        <div class="bg-white px-3 py-2 rounded-xl border border-[#CBD5E1] flex flex-wrap justify-between items-center gap-2 mb-3 shadow-xs">
+          <a id="btn-volver-croquis" href="#mi-riego" class="inline-flex items-center gap-1 font-bold text-xs text-[#111827] bg-[#F3F4F6] px-2.5 py-1.5 rounded-lg border border-[#CBD5E1] no-underline shrink-0">
+            <span class="material-symbols-outlined text-[16px]">arrow_back</span>
+            <span>Volver</span>
+          </a>
+          <span class="inline-flex items-center gap-1.5 font-extrabold text-xs text-[#1B5E20] bg-[#E8F5E9] px-2.5 py-1 rounded-full border border-[#C8E6C9]">
+            <span class="w-2 h-2 rounded-full bg-[#1B5E20] animate-pulse shrink-0"></span>
+            <span>120 L/s • 5.8 km</span>
+          </span>
+        </div>
+
+        <!-- Título -->
+        <div class="mb-2">
+          <h2 class="text-lg font-black text-[#111827] tracking-tight leading-tight">
+            Croquis Lineal de la Hijuela San Martín
+          </h2>
+          <p class="text-xs text-[#4B5563] mt-0.5">
+            Recorrido aguas abajo desde la Toma del Río hasta el desagüe colector.
+          </p>
+        </div>
+
+        <!-- Banner de Permisos según Rol (Solo lectura para Productor / Operativo para Tomero) -->
+        <div id="croquis-role-banner" class="mb-3 px-3 py-2 rounded-xl border border-[#CBD5E1] bg-[#F8F9FA] text-xs font-bold text-[#374151] flex items-center gap-2">
+          <span class="material-symbols-outlined text-[18px] text-[#1B5E20] shrink-0">visibility</span>
+          <span>Vista informativa (Solo lectura) — Solo el Tomero puede operar compuertas.</span>
+        </div>
+
+        <!-- Banner de Estado Hídrico en Tiempo Real -->
+        <div class="p-3 bg-white border-2 border-[#1B5E20] rounded-xl flex flex-wrap items-center justify-between gap-2 mb-4 shadow-xs">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="w-3 h-3 rounded-full bg-[#1B5E20] animate-pulse shrink-0"></span>
+            <div class="min-w-0">
+              <p class="text-xs font-black text-[#111827]">Agua en Tránsito Activo</p>
+              <p class="text-[11px] text-gray-600">Alimentando Compuerta 2 (Finca González)</p>
+            </div>
+          </div>
+          <span class="text-xs font-black bg-[#E8F5E9] text-[#1B5E20] px-2.5 py-1 rounded-full border border-[#C8E6C9] shrink-0">
+            En Turno
+          </span>
+        </div>
+
+        <!-- Canal Backbone Schematic -->
+        <div class="canal-spine canal-spine-active">
+          <div id="esquema-compuertas-list" class="flex flex-col">
+            <!-- Renderizado dinámicamente por app.js -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Referencia / Leyenda Rápida -->
+      <div class="mt-4 p-2.5 bg-white border border-[#CBD5E1] rounded-xl flex flex-wrap items-center justify-around gap-2 text-xs font-bold text-gray-700 shadow-xs">
+        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-[#1B5E20] shrink-0"></span> Abierta</span>
+        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded-full bg-gray-400 shrink-0"></span> Cerrada</span>
+        <span class="flex items-center gap-1"><span class="material-symbols-outlined text-[16px] text-gray-600">water</span> Río / Desagüe</span>
+      </div>
+    </main>
+
+    <!-- ============================================================== -->
+    <!-- PANTALLA 8: BOT OFICIAL DE WHATSAPP (Simulador Simple)         -->
+    <!-- ============================================================== -->
+    <main id="screen-whatsapp" class="app-screen hidden flex-1 px-3.5 pt-3 pb-28 flex flex-col justify-between">
+      <div class="flex flex-col flex-1">
+        <!-- Cabecera estilo WhatsApp Oficial DGI -->
+        <div class="bg-[#1B5E20] text-white p-3 rounded-t-2xl flex items-center justify-between gap-2 shadow-xs">
+          <div class="flex items-center gap-2 min-w-0">
+            <div class="w-9 h-9 rounded-full bg-white text-[#1B5E20] flex items-center justify-center font-black shrink-0">
+              <span class="material-symbols-outlined text-[22px] fill-icon">smart_toy</span>
+            </div>
+            <div class="min-w-0">
+              <div class="flex items-center gap-1">
+                <h2 class="text-sm sm:text-base font-black leading-tight truncate">AgroMendoza Bot (DGI)</h2>
+                <span class="material-symbols-outlined text-[15px] text-[#A5D6A7] fill-icon shrink-0" title="Cuenta Oficial Verificada">verified</span>
+              </div>
+              <p class="text-[11px] text-[#E8F5E9] font-medium truncate">Canal Oficial WhatsApp • 24/7</p>
+            </div>
+          </div>
+          <a href="#mi-riego" class="px-2.5 py-1 rounded-lg bg-white/15 text-white text-xs font-bold no-underline shrink-0">
+            Cerrar
+          </a>
+        </div>
+
+        <!-- Área de Conversación Simulada -->
+        <div id="whatsapp-chat-box" class="flex-1 bg-[#ECE5DD] border-x-2 border-[#CBD5E1] p-3 flex flex-col gap-3 min-h-[300px] max-h-[380px] overflow-y-auto">
+          <!-- Mensaje inicial del Bot -->
+          <div class="bg-white border border-gray-300 rounded-2xl rounded-tl-xs p-3 max-w-[90%] self-start shadow-2xs">
+            <p class="text-xs font-extrabold text-[#1B5E20] mb-1">AgroMendoza Bot</p>
+            <p class="text-sm text-[#111827] font-medium leading-snug">
+              Hola <strong>Don Alberto</strong> (Padrón #4022). Presione el botón de abajo para consultar cuándo le corresponde su turno de agua.
+            </p>
+            <span class="block text-right text-[11px] text-gray-500 mt-1">Atención automática</span>
+          </div>
+        </div>
+
+        <!-- Botón Único de Consulta: "¿Cuándo me toca el agua?" -->
+        <div class="bg-white border-2 border-t-0 border-[#CBD5E1] rounded-b-2xl p-3 flex flex-col gap-2 shadow-xs">
+          <button onclick="enviarConsultaWhatsApp()" type="button" class="w-full min-h-[54px] px-3 bg-[#1B5E20] hover:bg-[#144918] active:bg-[#0E3311] text-white font-extrabold text-sm sm:text-base rounded-xl flex items-center justify-center gap-2 shadow-sm active:scale-[0.99] transition cursor-pointer">
+            <span class="material-symbols-outlined text-[20px] fill-icon shrink-0">send</span>
+            <span>"¿Cuándo me toca el agua?"</span>
+          </button>
+        </div>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- BARRA DE NAVEGACIÓN INFERIOR DIFERENCIADA POR ROL (RBAC)       -->
+  <!-- ============================================================== -->
+  <nav aria-label="Navegación principal de AgroMendoza" class="fixed bottom-0 left-0 w-full z-50 bg-white border-t border-[#CBD5E1] shadow-lg">
+    <!-- Barra exclusiva de Don Alberto (Productor) - Ícono arriba y texto abajo para celular -->
+    <div id="nav-productor" class="max-w-[480px] w-full mx-auto px-2.5 py-2 grid grid-cols-3 gap-2">
+      <!-- Pestaña 1: Mi Riego -->
+      <a href="#mi-riego" class="bottom-nav-link min-h-[54px] py-1.5 px-1 bg-[#1B5E20] text-white font-extrabold rounded-xl flex flex-col items-center justify-center gap-0.5 text-xs shadow-xs active:scale-[0.98] transition no-underline">
+        <span class="material-symbols-outlined text-[22px] fill-icon">water_drop</span>
+        <span>Mi Riego</span>
+      </a>
+
+      <!-- Pestaña 2: Mis Trámites -->
+      <a href="#tramites" class="bottom-nav-link min-h-[54px] py-1.5 px-1 bg-white border-2 border-[#CBD5E1] text-[#111827] font-extrabold rounded-xl flex flex-col items-center justify-center gap-0.5 text-xs shadow-xs active:scale-[0.98] transition no-underline">
+        <span class="material-symbols-outlined text-[22px]">assignment</span>
+        <span>Trámites</span>
+      </a>
+
+      <!-- Pestaña 3: Bot WhatsApp Simulado -->
+      <a href="#whatsapp" class="bottom-nav-link min-h-[54px] py-1.5 px-1 bg-white border-2 border-[#CBD5E1] text-[#111827] font-extrabold rounded-xl flex flex-col items-center justify-center gap-0.5 text-xs shadow-xs active:scale-[0.98] transition no-underline">
+        <span class="material-symbols-outlined text-[22px]">chat</span>
+        <span>WhatsApp</span>
+      </a>
+    </div>
+
+    <!-- Barra exclusiva del Tomero (#884) -->
+    <div id="nav-tomero" class="hidden max-w-[480px] w-full mx-auto px-2.5 py-2 grid grid-cols-2 gap-2.5">
+      <!-- Pestaña 1: Turnos Hoy -->
+      <a href="#modo-tomero" class="bottom-nav-link min-h-[54px] py-1.5 px-2 bg-[#1B5E20] text-white font-extrabold rounded-xl flex flex-col items-center justify-center gap-0.5 text-xs sm:text-sm shadow-xs active:scale-[0.98] transition no-underline">
+        <span class="material-symbols-outlined text-[22px] fill-icon">fact_check</span>
+        <span>Turnos Hoy</span>
+      </a>
+
+      <!-- Pestaña 2: Croquis Compuertas -->
+      <a href="#esquema-hijuela" class="bottom-nav-link min-h-[54px] py-1.5 px-2 bg-white border-2 border-[#CBD5E1] text-[#111827] font-extrabold rounded-xl flex flex-col items-center justify-center gap-0.5 text-xs sm:text-sm shadow-xs active:scale-[0.98] transition no-underline">
+        <span class="material-symbols-outlined text-[22px]">alt_route</span>
+        <span>Croquis Compuertas</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: DETALLES TÉCNICOS DE DOTACIÓN Y COMPUERTAS             -->
+  <!-- ============================================================== -->
+  <div id="modal-detalles-dotacion" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-[440px] w-full p-5 flex flex-col gap-4 shadow-2xl border-2 border-[#1B5E20]">
+      <div class="flex items-center justify-between border-b border-gray-100 pb-2">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#1B5E20] text-[24px]">info</span>
+          <h3 class="font-extrabold text-lg text-[#111827]">Detalles de Dotación</h3>
+        </div>
+        <button onclick="hideDetallesDotacion()" type="button" class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center font-bold text-gray-700">✕</button>
+      </div>
+
+      <div class="flex flex-col gap-2.5 text-sm text-[#111827]">
+        <div class="p-2.5 bg-[#F8F9FA] rounded-xl border border-gray-200">
+          <p class="font-bold text-xs text-gray-500 uppercase">Inspección de Cauce</p>
+          <p class="font-extrabold text-base">Rama Pasco - Canal San Martín</p>
+        </div>
+        <div class="p-2.5 bg-[#F8F9FA] rounded-xl border border-gray-200">
+          <p class="font-bold text-xs text-gray-500 uppercase">Caudal Asignado</p>
+          <p class="font-extrabold text-base">120 Litros por Segundo (L/s)</p>
+        </div>
+        <div class="p-2.5 bg-[#F8F9FA] rounded-xl border border-gray-200">
+          <p class="font-bold text-xs text-gray-500 uppercase">Tiempo de Entrega</p>
+          <p class="font-extrabold text-base">3 Horas 30 Minutos continuos</p>
+        </div>
+        <div class="p-2.5 bg-[#F8F9FA] rounded-xl border border-gray-200">
+          <p class="font-bold text-xs text-gray-500 uppercase">Compuerta de Desvío</p>
+          <p class="font-extrabold text-base">Compuerta Nº 4 - Hijuela San Martín</p>
+        </div>
+      </div>
+
+      <button onclick="hideDetallesDotacion()" type="button" class="w-full h-12 bg-[#1B5E20] text-white font-extrabold rounded-xl">
+        Entendido
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: LISTA DE TURNOS DEL DÍA (TOMERO)                       -->
+  <!-- ============================================================== -->
+  <div id="modal-lista-turnos" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-[440px] w-full p-5 flex flex-col gap-4 shadow-2xl border-2 border-[#1B5E20]">
+      <div class="flex items-center justify-between border-b border-gray-100 pb-2">
+        <h3 class="font-extrabold text-lg text-[#111827]">Planilla de Turnos de Hoy</h3>
+        <button onclick="hideTomeroListaTurnos()" type="button" class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center font-bold text-gray-700">✕</button>
+      </div>
+
+      <div id="modal-turnos-list" class="flex flex-col gap-2 max-h-[380px] overflow-y-auto pr-1">
+        <!-- Renderizado dinámicamente por app.js -->
+      </div>
+
+      <button onclick="hideTomeroListaTurnos()" type="button" class="w-full h-12 bg-[#1B5E20] text-white font-extrabold rounded-xl">
+        Cerrar Planilla
+      </button>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL: BANDEJA DE SINCRONIZACIÓN FUERA DE LÍNEA                -->
+  <!-- ============================================================== -->
+  <div id="modal-sync-tray" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-[440px] w-full p-5 flex flex-col gap-4 shadow-2xl border-2 border-[#1B5E20]">
+      <div class="flex items-center justify-between border-b border-gray-100 pb-2">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#1B5E20] text-[24px]">sync</span>
+          <h3 class="font-extrabold text-lg text-[#111827]">Bandeja de Sincronización</h3>
+        </div>
+        <button onclick="closeSyncTray()" type="button" class="w-8 h-8 rounded-lg bg-gray-100 flex items-center justify-center font-bold text-gray-700" aria-label="Cerrar bandeja">✕</button>
+      </div>
+
+      <p class="text-xs text-[#374151] leading-snug">
+        Registros guardados de manera segura en el almacenamiento interno de su teléfono. Se transmitirán automáticamente al detectar señal o puede forzar el envío aquí.
+      </p>
+
+      <div id="sync-items-list" class="flex flex-col gap-2.5 max-h-[300px] overflow-y-auto pr-1">
+        <!-- Renderizado dinámicamente por app.js -->
+      </div>
+
+      <div class="flex flex-col gap-2 pt-2 border-t border-gray-100">
+        <button id="btn-forzar-sync" onclick="syncAllPending()" type="button" class="w-full min-h-[50px] bg-[#1B5E20] hover:bg-[#144918] active:bg-[#0E3311] text-white font-extrabold text-sm rounded-xl flex items-center justify-center gap-2 shadow-xs transition cursor-pointer">
+          <span class="material-symbols-outlined text-[20px]">cloud_upload</span>
+          <span>Forzar Sincronización Ahora</span>
+        </button>
+        <button onclick="closeSyncTray()" type="button" class="w-full h-11 bg-white border border-[#CBD5E1] text-[#111827] font-bold text-xs rounded-xl">
+          Cerrar Bandeja
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL RUT 1: VISTA DETALLADA DE LA PARCELA Y CUARTELES (GIS)   -->
+  <!-- ============================================================== -->
+  <div id="modal-detalle-parcela-rut" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-3">
+    <div class="bg-white rounded-2xl max-w-[450px] w-full max-h-[86vh] overflow-y-auto p-4 flex flex-col gap-3.5 shadow-2xl border-2 border-[#1B5E20]">
+      <!-- Cabecera Fija del Modal -->
+      <div class="flex items-center justify-between gap-2 border-b border-gray-200 pb-2.5">
+        <div class="flex items-center gap-2 min-w-0">
+          <span class="material-symbols-outlined text-[#1B5E20] text-[24px] shrink-0 fill-icon">map</span>
+          <div class="min-w-0">
+            <h3 class="font-black text-base text-[#111827] leading-tight">Ficha Catastral y Hídrica</h3>
+            <p class="text-[11px] font-bold text-[#4B5563]">Parcela 12B • Finca Los Álamos (4.50 ha)</p>
+          </div>
+        </div>
+        <button onclick="closeDetalleParcelaRUT()" type="button" class="w-8 h-8 rounded-lg bg-gray-100 border border-gray-300 flex items-center justify-center font-bold text-gray-800 shrink-0" aria-label="Cerrar plano de parcela">✕</button>
+      </div>
+
+      <!-- Plano Técnico Ampliado con Cuarteles, Vértices y Toma de Agua -->
+      <div class="bg-[#F8F9FA] border-2 border-[#CBD5E1] rounded-xl p-3 flex flex-col gap-2">
+        <div class="flex flex-wrap items-center justify-between gap-1 text-xs font-extrabold text-[#111827]">
+          <span>PLANO OFICIAL PRECARGADO (GIS ATM / DGI)</span>
+          <span class="bg-[#E8F5E9] text-[#1B5E20] px-2 py-0.5 rounded border border-[#C8E6C9] text-[11px]">Norte ↑</span>
+        </div>
+
+        <svg viewBox="0 0 320 205" class="w-full h-auto rounded-lg bg-white border border-[#CBD5E1]">
+          <!-- Cuadrícula de fondo catastral suave -->
+          <line x1="0" y1="50" x2="320" y2="50" stroke="#F1F5F9" stroke-width="1"/>
+          <line x1="0" y1="100" x2="320" y2="100" stroke="#F1F5F9" stroke-width="1"/>
+          <line x1="0" y1="150" x2="320" y2="150" stroke="#F1F5F9" stroke-width="1"/>
+          <line x1="80" y1="0" x2="80" y2="205" stroke="#F1F5F9" stroke-width="1"/>
+          <line x1="160" y1="0" x2="160" y2="205" stroke="#F1F5F9" stroke-width="1"/>
+          <line x1="240" y1="0" x2="240" y2="205" stroke="#F1F5F9" stroke-width="1"/>
+
+          <!-- Traza de la Hijuela San Martín (Borde Norte) -->
+          <path d="M 10 24 L 310 32" stroke="#0284C7" stroke-width="6" fill="none"/>
+          <text x="16" y="16" fill="#0369A1" font-size="9.5" font-weight="800">HIJUELA SAN MARTÍN (Caudal 120 L/s →)</text>
+
+          <!-- Compuerta Nº 4 -->
+          <circle cx="155" cy="28" r="7" fill="#0284C7" stroke="#FFFFFF" stroke-width="2"/>
+          <text x="166" y="23" fill="#0369A1" font-size="9" font-weight="800">TOMA C-4</text>
+
+          <!-- Cuartel 1 (Norte - 2.5 ha - Con Malla) -->
+          <polygon points="42,38 272,45 264,108 46,102" fill="#BBF7D0" stroke="#1B5E20" stroke-width="2.5"/>
+          <text x="155" y="70" text-anchor="middle" fill="#111827" font-size="11" font-weight="800">CUARTEL 1 (2.50 ha)</text>
+          <text x="155" y="84" text-anchor="middle" fill="#1B5E20" font-size="9.5" font-weight="700">Vid Malbec • Espaldero • Con Malla</text>
+
+          <!-- Cuartel 2 (Sur - 1.5 ha) -->
+          <polygon points="46,102 264,108 254,162 50,156" fill="#DCFCE7" stroke="#1B5E20" stroke-width="2.5"/>
+          <text x="155" y="130" text-anchor="middle" fill="#111827" font-size="11" font-weight="800">CUARTEL 2 (1.50 ha)</text>
+          <text x="155" y="144" text-anchor="middle" fill="#166534" font-size="9.5" font-weight="700">Vid Malbec • Parral • Surco</text>
+
+          <!-- Franja Callejón / Casco / Represa (0.5 ha) -->
+          <polygon points="50,156 254,162 250,182 52,176" fill="#E2E8F0" stroke="#475569" stroke-width="1.5"/>
+          <text x="155" y="172" text-anchor="middle" fill="#334155" font-size="8.5" font-weight="700">CALLEJÓN Y CASCO (0.50 ha - No cultivable)</text>
+
+          <!-- Vértices Oficiales Catastro ATM -->
+          <circle cx="42" cy="38" r="4" fill="#1B5E20"/>
+          <text x="20" y="42" fill="#111827" font-size="8.5" font-weight="800">V1</text>
+
+          <circle cx="272" cy="45" r="4" fill="#1B5E20"/>
+          <text x="279" y="49" fill="#111827" font-size="8.5" font-weight="800">V2</text>
+
+          <circle cx="250" cy="182" r="4" fill="#1B5E20"/>
+          <text x="258" y="186" fill="#111827" font-size="8.5" font-weight="800">V3</text>
+
+          <circle cx="52" cy="176" r="4" fill="#1B5E20"/>
+          <text x="30" y="180" fill="#111827" font-size="8.5" font-weight="800">V4</text>
+        </svg>
+
+        <p class="text-[11px] text-[#374151] leading-snug">
+          <strong>Nota técnica (Once-Only):</strong> Los 4 vértices georreferenciados fueron importados de la base GIS de la <strong>Dirección General de Catastro (ATM)</strong>. El productor no debe dibujar el lote.
+        </p>
+      </div>
+
+      <!-- Desglose Productivo por Cuarteles -->
+      <div class="flex flex-col gap-2">
+        <h4 class="text-xs font-black text-[#1B5E20] uppercase tracking-wider">Desglose de Cuarteles Declarados</h4>
+        <div class="p-2.5 bg-white border border-[#CBD5E1] rounded-xl text-xs space-y-1">
+          <div class="flex justify-between font-extrabold text-[#111827]">
+            <span>1. Cuartel Norte (Implantación 2014)</span>
+            <span class="text-[#1B5E20]">2.50 ha</span>
+          </div>
+          <p id="detalle-cuartel-1-desc" class="text-[#4B5563]">Variedad: Vid Malbec • Conducción: Espaldero alto • Con malla antigranizo.</p>
+        </div>
+
+        <div class="p-2.5 bg-white border border-[#CBD5E1] rounded-xl text-xs space-y-1">
+          <div class="flex justify-between font-extrabold text-[#111827]">
+            <span>2. Cuartel Sur (Implantación 2018)</span>
+            <span class="text-[#1B5E20]">1.50 ha</span>
+          </div>
+          <p id="detalle-cuartel-2-desc" class="text-[#4B5563]">Variedad: Vid Malbec • Conducción: Parral cuyano • Riego superficial.</p>
+        </div>
+
+        <div class="p-2.5 bg-[#F8F9FA] border border-[#CBD5E1] rounded-xl text-xs flex justify-between items-center font-bold text-[#374151]">
+          <span>3. Infraestructura, callejones y vivienda</span>
+          <span>0.50 ha</span>
+        </div>
+      </div>
+
+      <!-- Ficha de Conciliación Interinstitucional (Ley 9625 EDI) -->
+      <div class="bg-[#F8F9FA] border border-[#CBD5E1] rounded-xl p-3 text-xs space-y-1.5">
+        <p class="font-black text-[#111827] uppercase text-[11px] border-b border-gray-200 pb-1">
+          Datos Cruzados entre Organismos (Ley 9625)
+        </p>
+        <div class="flex justify-between gap-2"><span class="text-gray-600">Nomenclatura ATM:</span> <strong class="font-mono text-[#111827]">06-99-04-2819-000012-0000-3</strong></div>
+        <div class="flex justify-between gap-2"><span class="text-gray-600">Padrón Rentas ATM:</span> <strong class="text-[#111827]">04-2819-3 (Impuesto al día)</strong></div>
+        <div class="flex justify-between gap-2"><span class="text-gray-600">Derecho Riego DGI:</span> <strong class="text-[#111827]">Padrón #4022 • Definitivo (4.50 ha)</strong></div>
+        <div class="flex justify-between gap-2"><span class="text-gray-600">Toma Hídrica:</span> <strong class="text-[#111827]">Hijuela San Martín • Compuerta 4</strong></div>
+        <div class="flex justify-between gap-2"><span class="text-gray-600">Centroide GPS:</span> <strong class="text-[#111827]">-33.5842°, -69.0189° (Valle de Uco)</strong></div>
+      </div>
+
+      <!-- Botones del Modal -->
+      <div class="flex flex-col gap-2 pt-1">
+        <button onclick="closeDetalleParcelaRUT()" type="button" class="w-full min-h-[48px] bg-[#1B5E20] text-white font-extrabold text-sm rounded-xl cursor-pointer">
+          Volver a la Declaración RUT
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL RUT 2: DECLARAR CAMBIO DE CULTIVO, MALLA O RIEGO         -->
+  <!-- ============================================================== -->
+  <div id="modal-modificar-rut" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-3">
+    <div class="bg-white rounded-2xl max-w-[440px] w-full max-h-[86vh] overflow-y-auto p-4 flex flex-col gap-3.5 shadow-2xl border-2 border-[#1B5E20]">
+      <div class="flex items-center justify-between gap-2 border-b border-gray-200 pb-2">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#1B5E20] text-[22px]">edit_note</span>
+          <h3 class="font-extrabold text-base text-[#111827]">Actualizar Datos de Cuarteles</h3>
+        </div>
+        <button onclick="closeModificarRUTModal()" type="button" class="w-8 h-8 rounded-lg bg-gray-100 border border-gray-300 flex items-center justify-center font-bold text-gray-800">✕</button>
+      </div>
+
+      <p class="text-xs text-[#374151] leading-snug">
+        El polígono catastral de su finca (4.5 ha) se mantiene fijo. Seleccione si realizó cambios productivos en esta campaña:
+      </p>
+
+      <div class="flex flex-col gap-3 text-xs">
+        <!-- Selector 1: Cultivo principal -->
+        <div class="flex flex-col gap-1">
+          <label for="select-rut-cultivo" class="font-extrabold text-[#111827] uppercase">1. Cultivo en Producción (4.0 ha netas)</label>
+          <select id="select-rut-cultivo" class="w-full min-h-[46px] rounded-xl border-2 border-[#CBD5E1] bg-white px-3 py-2 text-sm font-bold text-[#111827]">
+            <option value="Vid Malbec">Vid Malbec (4.0 ha en producción)</option>
+            <option value="Vid Cabernet Sauvignon">Vid Cabernet Sauvignon (Reinjertado)</option>
+            <option value="Vid Malbec (2.5 ha) + Nogales (1.5 ha)">Vid Malbec (2.5 ha) + Frutales/Nogal (1.5 ha)</option>
+            <option value="Vid Malbec (2.5 ha) + Chacra Ajo (1.5 ha)">Vid Malbec (2.5 ha) + Hortalizas/Ajo (1.5 ha)</option>
+          </select>
+        </div>
+
+        <!-- Selector 2: Malla Antigranizo (Contingencias Climáticas) -->
+        <div class="flex flex-col gap-1">
+          <label for="select-rut-malla" class="font-extrabold text-[#111827] uppercase">2. Protección Malla Antigranizo</label>
+          <select id="select-rut-malla" class="w-full min-h-[46px] rounded-xl border-2 border-[#CBD5E1] bg-white px-3 py-2 text-sm font-bold text-[#111827]">
+            <option value="Malla en Cuartel 1 (2.5 ha)">Malla en Cuartel 1 (2.5 ha protegidas)</option>
+            <option value="Malla Completa (4.0 ha)">Malla en toda la finca (4.0 ha protegidas)</option>
+            <option value="Sin malla antigranizo">Sin malla antigranizo (Riesgo directo)</option>
+          </select>
+        </div>
+
+        <!-- Selector 3: Sistema de Riego Intra-finca -->
+        <div class="flex flex-col gap-1">
+          <label for="select-rut-riego" class="font-extrabold text-[#111827] uppercase">3. Método de Riego Interno</label>
+          <select id="select-rut-riego" class="w-full min-h-[46px] rounded-xl border-2 border-[#CBD5E1] bg-white px-3 py-2 text-sm font-bold text-[#111827]">
+            <option value="Superficial Definitivo">Superficial por Surco / Melga</option>
+            <option value="Goteo Presurizado + Represa">Riego por Goteo Presurizado</option>
+            <option value="Mixto (Goteo en C1 / Surco en C2)">Mixto (Goteo en Cuartel 1 / Surco en Cuartel 2)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2 pt-2 border-t border-gray-100">
+        <button onclick="guardarCambiosRUT()" type="button" class="w-full min-h-[50px] bg-[#1B5E20] text-white font-extrabold text-sm rounded-xl flex items-center justify-center gap-2 cursor-pointer">
+          <span class="material-symbols-outlined text-[20px]">save</span>
+          <span>Guardar Cambios y Actualizar Ficha</span>
+        </button>
+        <button onclick="closeModificarRUTModal()" type="button" class="w-full h-11 bg-white border border-[#CBD5E1] text-[#111827] font-bold text-xs rounded-xl">
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- MODAL RUT 3: CERTIFICADO / CÉDULA OFICIAL RUT 2026             -->
+  <!-- ============================================================== -->
+  <div id="modal-constancia-rut" class="hidden fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-3">
+    <div class="bg-white rounded-2xl max-w-[440px] w-full max-h-[86vh] overflow-y-auto p-4 flex flex-col gap-3.5 shadow-2xl border-2 border-[#1B5E20]">
+      <div class="flex items-center justify-between gap-2 border-b border-gray-200 pb-2">
+        <div class="flex items-center gap-2">
+          <span class="material-symbols-outlined text-[#1B5E20] text-[24px] fill-icon">verified</span>
+          <div>
+            <h3 class="font-black text-base text-[#111827] leading-tight">Cédula Digital RUT 2026</h3>
+            <p class="text-[11px] font-bold text-[#1B5E20]">Ministerio de Producción • DGI • ATM</p>
+          </div>
+        </div>
+        <button onclick="closeConstanciaRUTModal()" type="button" class="w-8 h-8 rounded-lg bg-gray-100 border border-gray-300 flex items-center justify-center font-bold text-gray-800">✕</button>
+      </div>
+
+      <!-- Cuerpo del Certificado Oficial -->
+      <div class="bg-[#F8F9FA] border-2 border-[#1B5E20] rounded-xl p-3.5 text-xs space-y-2">
+        <div class="flex justify-between items-center border-b border-gray-200 pb-2">
+          <span class="font-black text-[#1B5E20] uppercase">CONSTANCIA Nº 2026-RUT-042819</span>
+          <span class="bg-[#E8F5E9] text-[#1B5E20] font-extrabold px-2 py-0.5 rounded border border-[#C8E6C9]">VIGENTE</span>
+        </div>
+
+        <div class="space-y-1 text-[#111827]">
+          <p><span class="text-gray-500">Productor Titular:</span> <strong>Alberto González (CUIT 20-14892301-4)</strong></p>
+          <p><span class="text-gray-500">Establecimiento:</span> <strong>Finca Los Álamos (Parcela 12B)</strong></p>
+          <p><span class="text-gray-500">Nomenclatura ATM:</span> <strong class="font-mono">06-99-04-2819-000012-0000-3</strong></p>
+          <p><span class="text-gray-500">Derecho Riego DGI:</span> <strong>Padrón #4022 • Hijuela San Martín C-4</strong></p>
+          <p><span class="text-gray-500">Superficie / Cultivo:</span> <strong id="cert-rut-cultivo">4.5 ha Totales • 4.0 ha Vid Malbec</strong></p>
+          <p><span class="text-gray-500">Protección Climática:</span> <strong id="cert-rut-malla">Malla en Cuartel 1 (2.5 ha)</strong></p>
+          <p><span class="text-gray-500">Fecha de Firma:</span> <strong id="cert-rut-fecha">Recién firmado</strong></p>
+        </div>
+
+        <div class="pt-2 border-t border-gray-200 flex items-center gap-2 text-[11px] text-[#1B5E20] font-bold">
+          <span class="material-symbols-outlined text-[18px] shrink-0 fill-icon">gpp_good</span>
+          <span>Apto para Contingencias Climáticas (Ley 9083), Comercialización de Cosecha y Beneficios DGI.</span>
+        </div>
+
+        <div class="bg-white border border-gray-200 rounded-lg p-2 text-[10px] font-mono text-gray-600 break-all">
+          Firma Electrónica/Digital Ley 25.506 • Sello SHA-256: 8f94e2c1a0b74d19f3e2c8a1904b7e21
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <button onclick="descargarPDFConstanciaRUT()" type="button" class="w-full min-h-[48px] bg-[#1B5E20] text-white font-extrabold text-sm rounded-xl flex items-center justify-center gap-2 cursor-pointer">
+          <span class="material-symbols-outlined text-[20px]">download</span>
+          <span>Guardar PDF en el Teléfono (Offline)</span>
+        </button>
+        <button onclick="closeConstanciaRUTModal()" type="button" class="w-full h-11 bg-white border border-[#CBD5E1] text-[#111827] font-bold text-xs rounded-xl">
+          Cerrar Certificado
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Script Principal de la PWA -->
+  <script src="app.js"></script>
+</body>
+</html>

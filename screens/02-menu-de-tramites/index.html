@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>AgroMendoza - Menú de Trámites</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;0,800;1,400;1,700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "error": "#ba1a1a",
+            "inverse-surface": "#313030",
+            "background": "#f4f5f7",
+            "surface-container-highest": "#e5e2e1",
+            "outline-variant": "#c0c9bb",
+            "on-primary-container": "#90d689",
+            "on-secondary-fixed": "#410002",
+            "on-secondary": "#ffffff",
+            "surface-tint": "#2a6b2c",
+            "tertiary": "#6b1d3d",
+            "tertiary-container": "#883454",
+            "on-surface": "#1c1b1b",
+            "secondary-fixed-dim": "#ffb4ab",
+            "surface-container-high": "#ebe7e7",
+            "on-background": "#1c1b1b",
+            "on-primary-fixed": "#002203",
+            "tertiary-fixed-dim": "#ffb1c8",
+            "secondary-fixed": "#ffdad6",
+            "on-primary": "#ffffff",
+            "surface-variant": "#e5e2e1",
+            "outline": "#717a6d",
+            "secondary": "#b51a1b",
+            "on-tertiary-fixed-variant": "#7a2949",
+            "on-error": "#ffffff",
+            "error-container": "#ffdad6",
+            "primary": "#00450d",
+            "on-tertiary": "#ffffff",
+            "surface-container": "#f0edec",
+            "on-tertiary-fixed": "#3e001d",
+            "inverse-primary": "#91d78a",
+            "on-tertiary-container": "#ffaec6",
+            "surface-container-low": "#f6f3f2",
+            "primary-container": "#1b5e20",
+            "surface-container-lowest": "#ffffff",
+            "surface": "#fcf9f8",
+            "on-primary-fixed-variant": "#0c5216",
+            "tertiary-fixed": "#ffd9e2",
+            "on-error-container": "#93000a",
+            "on-surface-variant": "#41493e",
+            "primary-fixed": "#acf4a4",
+            "on-secondary-container": "#fffbff",
+            "inverse-on-surface": "#f3f0ef",
+            "surface-bright": "#fcf9f8",
+            "surface-dim": "#dcd9d9",
+            "secondary-container": "#d93630",
+            "on-secondary-fixed-variant": "#93000b",
+            "primary-fixed-dim": "#91d78a"
+          },
+          "fontFamily": {
+            "headline-sm": ["Atkinson Hyperlegible Next", "sans-serif"],
+            "label-md": ["Atkinson Hyperlegible Next", "sans-serif"],
+            "label-sm": ["Atkinson Hyperlegible Next", "sans-serif"],
+            "body-md": ["Atkinson Hyperlegible Next", "sans-serif"],
+            "headline-md": ["Atkinson Hyperlegible Next", "sans-serif"]
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    body {
+      min-height: max(844px, 100dvh);
+      font-family: 'Atkinson Hyperlegible Next', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
+</style>
+</head>
+<body class="bg-[#F4F5F7] text-[#1A1A1A] antialiased min-h-screen flex justify-center p-0 m-0">
+<!-- Mobile Canvas Context (390px x 844px) -->
+<main class="w-full max-w-[390px] min-h-[844px] bg-[#F4F5F7] flex flex-col justify-between border-x border-[#E2E8F0] shadow-sm relative pb-5">
+<div>
+<!-- Top Area: Crisp white top bar with high contrast -->
+<header class="w-full bg-white border-b border-[#E2E8F0] px-4 py-3 shadow-xs">
+<div class="flex items-center justify-between gap-2">
+<!-- Left: Close Button (40px height, rounded-lg, charcoal text) -->
+<button aria-label="Cerrar menú y regresar" class="h-10 px-3 bg-white border border-[#CBD5E1] rounded-lg flex items-center gap-1 text-[#262626] font-bold text-[14px] hover:bg-[#F8FAFC] active:bg-[#F1F5F9] transition-colors" type="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[18px]">close</span>
+<span>Cerrar</span>
+</button>
+<!-- Center: Bold title 'Menú Principal' (20px, font-bold, text #1A1A1A) -->
+<h1 class="text-[20px] font-bold text-[#1A1A1A] tracking-tight text-center flex-1 whitespace-nowrap">
+          Menú Principal
+        </h1>
+<!-- Right: Pill badge 'Alberto González' -->
+<div class="flex items-center gap-1.5 bg-[#E8F5E9] text-[#2E7D32] px-3 py-1.5 rounded-full text-[13px] font-semibold flex-shrink-0 border border-[#C8E6C9]">
+<span class="w-2 h-2 rounded-full bg-[#2E7D32]"></span>
+<span class="whitespace-nowrap">Alberto González</span>
+</div>
+</div>
+</header>
+<!-- Subheader / Context Bar -->
+<div class="px-4 py-3 bg-[#EAECEF] border-b border-[#D8DCE2] flex items-center justify-center">
+<p class="text-[13px] font-semibold text-[#475569] text-center tracking-normal">
+        Padrón #4022 • Inspección de Cauce Rama Pasco
+      </p>
+</div>
+<!-- Main List of Action Tiles -->
+<section aria-label="Trámites disponibles" class="px-4 pt-4 pb-2">
+<nav aria-label="Lista de trámites y gestiones" class="flex flex-col gap-3">
+<!-- 1. Mis Fincas y Padrones de Riego -->
+<a class="min-h-[60px] px-4 py-3 bg-white border border-[#E2E8F0] rounded-xl flex items-center justify-between text-[#1A1A1A] font-bold text-[18px] shadow-sm hover:border-[#CBD5E1] active:bg-[#F8FAFC] transition-colors" href="#fincas" role="button">
+<span class="text-left leading-snug">Mis Fincas y Padrones de Riego</span>
+<span aria-hidden="true" class="material-symbols-outlined text-[#64748B] text-[28px] ml-2 flex-shrink-0">chevron_right</span>
+</a>
+<!-- 2. Renovar Declaración RUT Anual -->
+<a class="min-h-[60px] px-4 py-3 bg-white border border-[#E2E8F0] rounded-xl flex items-center justify-between text-[#1A1A1A] font-bold text-[18px] shadow-sm hover:border-[#CBD5E1] active:bg-[#F8FAFC] transition-colors" href="#rut" role="button">
+<span class="text-left leading-snug">Renovar Declaración RUT Anual</span>
+<span aria-hidden="true" class="material-symbols-outlined text-[#64748B] text-[28px] ml-2 flex-shrink-0">chevron_right</span>
+</a>
+<!-- 3. Descargar Comprobantes y Constancias -->
+<a class="min-h-[60px] px-4 py-3 bg-white border border-[#E2E8F0] rounded-xl flex items-center justify-between text-[#1A1A1A] font-bold text-[18px] shadow-sm hover:border-[#CBD5E1] active:bg-[#F8FAFC] transition-colors" href="#constancias" role="button">
+<span class="text-left leading-snug">Descargar Comprobantes y Constancias</span>
+<span aria-hidden="true" class="material-symbols-outlined text-[#64748B] text-[28px] ml-2 flex-shrink-0">chevron_right</span>
+</a>
+<!-- 4. Pago de Canon DGI / ATM -->
+<a class="min-h-[60px] px-4 py-3 bg-white border border-[#E2E8F0] rounded-xl flex items-center justify-between text-[#1A1A1A] font-bold text-[18px] shadow-sm hover:border-[#CBD5E1] active:bg-[#F8FAFC] transition-colors" href="#pagos" role="button">
+<span class="text-left leading-snug">Pago de Canon DGI / ATM</span>
+<span aria-hidden="true" class="material-symbols-outlined text-[#64748B] text-[28px] ml-2 flex-shrink-0">chevron_right</span>
+</a>
+<!-- 5. Centros de Atención y Gestores -->
+<a class="min-h-[60px] px-4 py-3 bg-white border border-[#E2E8F0] rounded-xl flex items-center justify-between text-[#1A1A1A] font-bold text-[18px] shadow-sm hover:border-[#CBD5E1] active:bg-[#F8FAFC] transition-colors" href="#centros" role="button">
+<span class="text-left leading-snug">Centros de Atención y Gestores</span>
+<span aria-hidden="true" class="material-symbols-outlined text-[#64748B] text-[28px] ml-2 flex-shrink-0">chevron_right</span>
+</a>
+</nav>
+</section>
+</div>
+<!-- Bottom Action & Official Footer -->
+<footer class="w-full px-4 pt-3 pb-2 mt-auto">
+<a class="w-full h-[56px] min-h-[56px] bg-white border-2 border-[#1B5E20] text-[#1B5E20] active:bg-[#1B5E20] active:text-white rounded-xl flex items-center justify-center gap-2 font-bold text-[16px] shadow-sm transition-colors group" href="tel:080033374346" role="button">
+<span aria-hidden="true" class="material-symbols-outlined text-[24px] text-[#1B5E20] group-active:text-white flex-shrink-0">call</span>
+<span class="tracking-tight text-center">Llamar a la Inspección de Cauce</span>
+</a>
+<div class="mt-3 text-center">
+<p class="text-[#64748B] text-[13px] font-medium tracking-tight">
+        Departamento General de Irrigación • Mendoza
+      </p>
+</div>
+</footer>
+</main>
+</body></html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+
+<html class="h-full" lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"/>
+<title>AgroMendoza - Modo Operador Tomero</title>
+<!-- Atkinson Hyperlegible Next via Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:ital,wght@0,400;0,700;0,800;1,400;1,700&amp;display=swap" rel="stylesheet"/>
+<!-- Material Symbols Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with form plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "secondary-container": "#d93630",
+            "on-background": "#1c1b1b",
+            "secondary": "#b51a1b",
+            "tertiary-fixed-dim": "#ffb1c8",
+            "surface-bright": "#fcf9f8",
+            "on-secondary-container": "#fffbff",
+            "error": "#ba1a1a",
+            "tertiary-fixed": "#ffd9e2",
+            "primary-container": "#1b5e20",
+            "surface-container-highest": "#e5e2e1",
+            "background": "#fcf9f8",
+            "surface-tint": "#2a6b2c",
+            "on-surface": "#1c1b1b",
+            "surface-dim": "#dcd9d9",
+            "surface-container-high": "#ebe7e7",
+            "inverse-on-surface": "#f3f0ef",
+            "on-surface-variant": "#41493e",
+            "outline": "#717a6d",
+            "tertiary-container": "#883454",
+            "surface-container": "#f0edec",
+            "on-primary-fixed-variant": "#0c5216",
+            "on-secondary": "#ffffff",
+            "on-tertiary": "#ffffff",
+            "surface-container-lowest": "#ffffff",
+            "inverse-surface": "#313030",
+            "on-tertiary-container": "#ffaec6",
+            "surface-container-low": "#f6f3f2",
+            "secondary-fixed-dim": "#ffb4ab",
+            "tertiary": "#6b1d3d",
+            "error-container": "#ffdad6",
+            "on-tertiary-fixed": "#3e001d",
+            "on-tertiary-fixed-variant": "#7a2949",
+            "surface-variant": "#e5e2e1",
+            "on-primary": "#ffffff",
+            "on-secondary-fixed": "#410002",
+            "on-primary-container": "#90d689",
+            "secondary-fixed": "#ffdad6",
+            "on-error-container": "#93000a",
+            "inverse-primary": "#91d78a",
+            "on-secondary-fixed-variant": "#93000b",
+            "on-primary-fixed": "#002203",
+            "surface": "#fcf9f8",
+            "outline-variant": "#c0c9bb",
+            "on-error": "#ffffff",
+            "primary-fixed-dim": "#91d78a",
+            "primary-fixed": "#acf4a4",
+            "primary": "#00450d"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.75rem",
+            "2xl": "1rem",
+            "full": "9999px"
+          },
+          "fontFamily": {
+            "sans": ["Atkinson Hyperlegible Next", "sans-serif"],
+            "headline-sm": ["Atkinson Hyperlegible Next"],
+            "headline-lg-mobile": ["Atkinson Hyperlegible Next"],
+            "body-lg": ["Atkinson Hyperlegible Next"],
+            "label-lg": ["Atkinson Hyperlegible Next"],
+            "headline-lg": ["Atkinson Hyperlegible Next"],
+            "body-xl": ["Atkinson Hyperlegible Next"],
+            "label-sm": ["Atkinson Hyperlegible Next"],
+            "headline-md": ["Atkinson Hyperlegible Next"],
+            "display-data": ["Atkinson Hyperlegible Next"],
+            "body-md": ["Atkinson Hyperlegible Next"],
+            "label-md": ["Atkinson Hyperlegible Next"],
+            "display-data-mobile": ["Atkinson Hyperlegible Next"]
+          },
+          "fontSize": {
+            "headline-sm": ["22px", { "lineHeight": "30px", "fontWeight": "700" }],
+            "headline-lg-mobile": ["30px", { "lineHeight": "38px", "fontWeight": "700" }],
+            "body-lg": ["20px", { "lineHeight": "30px", "fontWeight": "400" }],
+            "label-lg": ["20px", { "lineHeight": "26px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+            "headline-lg": ["36px", { "lineHeight": "44px", "letterSpacing": "-0.01em", "fontWeight": "700" }],
+            "body-xl": ["22px", { "lineHeight": "32px", "fontWeight": "400" }],
+            "label-sm": ["16px", { "lineHeight": "22px", "letterSpacing": "0.02em", "fontWeight": "700" }],
+            "headline-md": ["26px", { "lineHeight": "34px", "fontWeight": "700" }],
+            "display-data": ["56px", { "lineHeight": "64px", "letterSpacing": "-0.02em", "fontWeight": "800" }],
+            "body-md": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+            "label-md": ["18px", { "lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "700" }],
+            "display-data-mobile": ["44px", { "lineHeight": "52px", "letterSpacing": "-0.02em", "fontWeight": "800" }]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+      font-family: 'Atkinson Hyperlegible Next', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+      line-height: 1;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .fill-icon {
+      font-variation-settings: 'FILL' 1, 'wght' 700;
+    }
+  </style>
+</head>
+<body class="bg-[#F9F9F9] text-[#111111] antialiased min-h-full flex flex-col justify-between selection:bg-[#1B5E20] selection:text-white">
+<!-- 2. TOP NAVIGATION BAR (Matching 'Mi Riego' header) -->
+<header class="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between w-full h-[64px] shrink-0 sticky top-0 z-40">
+<button aria-label="Abrir menú de navegación" class="w-12 h-12 flex items-center justify-center -ml-2 text-[#111111] active:bg-gray-100 rounded-lg transition-none" type="button">
+<span class="material-symbols-outlined text-[32px]" data-icon="menu">menu</span>
+</button>
+<h1 class="text-xl font-bold text-[#111111] tracking-tight">
+    AgroMendoza
+  </h1>
+<div class="flex items-center gap-1.5 bg-gray-100 border border-gray-200 px-3 py-1.5 rounded-full">
+<span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+<span class="text-xs font-bold text-gray-700 whitespace-nowrap">Tomero #884</span>
+</div>
+</header>
+<!-- MAIN CONTENT CANVAS -->
+<main class="flex-1 w-full max-w-[480px] mx-auto px-4 pt-4 pb-28 flex flex-col gap-4">
+<!-- 3. TOP STATUS PILL (Matching canal/status pill of 'Mi Riego') -->
+<div class="border border-gray-200 bg-white rounded-2xl p-3 flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-2.5">
+<span class="w-3.5 h-3.5 rounded-full bg-amber-500 ring-2 ring-amber-200 animate-pulse shrink-0"></span>
+<div>
+<p class="font-bold text-sm text-[#111111] leading-tight">Modo Offline: Sin Señal</p>
+<p class="text-xs text-gray-500 leading-tight">(Guardando local)</p>
+</div>
+</div>
+<span class="bg-gray-100 text-gray-800 text-xs font-bold px-3 py-1 rounded-full border border-gray-200 shrink-0">
+      Turno #2 de 6
+    </span>
+</div>
+<!-- 4. MAIN ACTIVE CARD (Identical style to 'TU PRÓXIMO RIEGO' card with deep green border) -->
+<section class="bg-white rounded-2xl border-2 border-[#1B5E20] p-5 shadow-sm space-y-4">
+<!-- Header Row -->
+<div class="flex items-center justify-between border-b border-gray-100 pb-3 gap-2">
+<span class="text-[#1B5E20] text-sm tracking-wide font-bold uppercase">TURNO ACTUAL (2 DE 6)</span>
+<span class="bg-[#E8F5E9] text-[#2E7D32] px-3 py-1 rounded-full text-xs font-bold inline-flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px] fill-icon" data-icon="radio_button_checked">radio_button_checked</span>
+        En Curso
+      </span>
+</div>
+<!-- Big Title -->
+<div class="pt-0.5">
+<p class="text-xs uppercase font-bold text-gray-500 tracking-wider">Titular Registrado</p>
+<h2 class="text-2xl font-black text-[#111111] tracking-tight uppercase mt-0.5 leading-snug">
+        FINCA GONZÁLEZ
+      </h2>
+</div>
+<!-- Central Inset Time Box -->
+<div class="bg-[#F9FBF9] border border-gray-200 rounded-xl p-4 text-center">
+<span class="text-3xl font-extrabold text-[#111111] block tracking-tight">10:00 a 13:00 hs</span>
+<p class="text-sm font-semibold text-gray-700 mt-1">Padrón 4022 • 3 horas de dotación</p>
+</div>
+<!-- Location Detail Row -->
+<div class="flex items-start gap-3 pt-1">
+<span class="material-symbols-outlined text-[#1B5E20] text-[26px] shrink-0 mt-0.5" data-icon="location_on">location_on</span>
+<div>
+<p class="font-bold text-gray-900 text-base leading-snug">Compuerta 2 • Hijuela Oeste</p>
+<p class="text-xs text-gray-600 leading-snug mt-0.5">Desvío secundario habilitado</p>
+</div>
+</div>
+<!-- Action Link Box / Pill Button -->
+<a class="w-full py-2.5 px-4 rounded-xl border border-gray-300 bg-white text-gray-800 text-sm font-semibold flex items-center justify-between hover:bg-gray-50 active:bg-gray-100 transition-none" href="#lista-turnos">
+<span>Ver lista completa de turnos (4 restantes)</span>
+<span class="material-symbols-outlined text-[20px] text-gray-600" data-icon="chevron_right">chevron_right</span>
+</a>
+</section>
+<!-- 5. PRIMARY ACTION BUTTONS (Stacked below main card) -->
+<div class="flex flex-col gap-3 pt-1">
+<!-- Button 1: Solid Deep Green Primary -->
+<button class="bg-[#1B5E20] text-white font-bold text-base h-14 rounded-xl flex items-center justify-center gap-2 shadow-sm active:scale-[0.99] transition-none w-full" id="btn-entrega" type="button">
+<span class="material-symbols-outlined text-[24px] fill-icon" data-icon="check_circle">check_circle</span>
+<span class="tracking-wide uppercase font-extrabold">AGUA ENTREGADA</span>
+</button>
+<!-- Button 2: White background with red outline -->
+<button class="bg-white border-2 border-red-600 text-red-700 font-bold text-base h-14 rounded-xl flex items-center justify-center gap-2 hover:bg-red-50 active:scale-[0.99] transition-none w-full" id="btn-no-entrega" type="button">
+<span class="material-symbols-outlined text-[24px]" data-icon="cancel">cancel</span>
+<span class="tracking-wide uppercase font-extrabold">No Recibió / Ausente</span>
+</button>
+<!-- Helper Caption -->
+<p class="text-center text-xs text-gray-600 font-medium px-2 pt-1 flex items-center justify-center gap-1.5">
+<span class="material-symbols-outlined text-[16px] text-gray-500" data-icon="offline_pin">offline_pin</span>
+      Los datos se guardan en el teléfono y se sincronizarán al detectar señal.
+    </p>
+</div>
+</main>
+<!-- 6. BOTTOM NAVIGATION BAR (Exact replica from 'Mi Riego' layout) -->
+<nav aria-label="Navegación principal" class="fixed bottom-0 left-0 w-full z-50 flex items-stretch gap-2 p-2 bg-white border-t border-gray-200 max-w-[480px] mx-auto right-0">
+<!-- Tab 1 (Active): Solid Deep Green -->
+<a aria-current="page" class="bg-[#1B5E20] text-white font-bold rounded-xl py-3 px-4 flex-1 flex items-center justify-center gap-2 active:opacity-90 transition-none" href="#turnos-hoy">
+<span class="material-symbols-outlined text-[26px] fill-icon" data-icon="water_drop">water_drop</span>
+<span class="text-base font-bold">Turnos Hoy</span>
+</a>
+<!-- Tab 2 (Inactive): White with border -->
+<a class="bg-white text-gray-800 border-2 border-gray-300 font-bold rounded-xl py-3 px-4 flex-1 flex items-center justify-center gap-2 hover:bg-gray-50 active:bg-gray-100 transition-none" href="#novedades">
+<span class="material-symbols-outlined text-[26px] text-gray-700" data-icon="assignment">assignment</span>
+<span class="text-base font-bold">Mis Novedades</span>
+</a>
+</nav>
+<!-- Tactile Button Feedback -->
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const btnEntrega = document.getElementById('btn-entrega');
+    const btnNoEntrega = document.getElementById('btn-no-entrega');
+
+    if (btnEntrega) {
+      btnEntrega.addEventListener('click', () => {
+        if (navigator.vibrate) navigator.vibrate([100, 50, 100]);
+        const originalContent = btnEntrega.innerHTML;
+        btnEntrega.innerHTML = `<span class="material-symbols-outlined text-[24px] fill-icon">check</span> <span class="font-extrabold uppercase">REGISTRADO EN MEMORIA</span>`;
+        btnEntrega.classList.add('bg-emerald-900');
+        setTimeout(() => {
+          btnEntrega.innerHTML = originalContent;
+          btnEntrega.classList.remove('bg-emerald-900');
+        }, 1800);
+      });
+    }
+
+    if (btnNoEntrega) {
+      btnNoEntrega.addEventListener('click', () => {
+        if (navigator.vibrate) navigator.vibrate(200);
+        const originalContent = btnNoEntrega.innerHTML;
+        btnNoEntrega.innerHTML = `<span class="material-symbols-outlined text-[24px]">priority_high</span> <span class="font-extrabold uppercase">NOVEDAD REGISTRADA</span>`;
+        btnNoEntrega.classList.add('bg-red-100');
+        setTimeout(() => {
+          btnNoEntrega.innerHTML = originalContent;
+          btnNoEntrega.classList.remove('bg-red-100');
+        }, 1800);
+      });
+    }
+  });
+</script>
+</body></html>

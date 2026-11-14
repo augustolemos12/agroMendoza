@@ -1,0 +1,26 @@
+{
+  "name": "AgroMendoza - Riego & Trámites",
+  "short_name": "AgroMendoza",
+  "description": "Aplicación para productores agropecuarios y regantes de Mendoza. Consulta de turnos de riego, alertas de agua y trámites de cauce.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F4F5F7",
+  "theme_color": "#1B5E20",
+  "orientation": "portrait-primary",
+  "categories": ["productivity", "utilities", "business"],
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}

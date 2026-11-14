@@ -1,0 +1,172 @@
+{
+  "3da24033a2c54aed9aa97fe0a6be9e38": {
+    "slug": "01-mi-riego-don-alberto",
+    "title": "Mi Riego - Don Alberto (Modo Campo Accesible)",
+    "response": {
+      "id": 1,
+      "jsonrpc": "2.0",
+      "result": {
+        "content": [
+          {
+            "text": "{\"name\":\"projects/8031340296634183808/screens/3da24033a2c54aed9aa97fe0a6be9e38\",\"title\":\"Mi Riego - Don Alberto (Modo Campo Accesible)\",\"screenshot\":{\"name\":\"projects/8031340296634183808/screens/3da24033a2c54aed9aa97fe0a6be9e38/fileEntries/screenshot\",\"downloadUrl\":\"https://stitch.googleapis.com/v1/projects/8031340296634183808/files/screenshot_00065f2376e8fb2d02dea64d321c975b:download\",\"mimeType\":\"image/png\"},\"htmlCode\":{\"name\":\"projects/8031340296634183808/screens/3da24033a2c54aed9aa97fe0a6be9e38/fileEntries/html\",\"downloadUrl\":\"https://stitch.googleapis.com/v1/projects/8031340296634183808/files/3da24033a2c54aed9aa97fe0a6be9e38:download\",\"mimeType\":\"text/html\"},\"width\":\"780\",\"height\":\"1768\",\"deviceType\":\"MOBILE\",\"screenType\":\"DESIGN\"}",
+            "type": "text"
+          }
+        ],
+        "structuredContent": {
+          "deviceType": "MOBILE",
+          "height": "1768",
+          "htmlCode": {
+            "downloadUrl": "https://stitch.googleapis.com/v1/projects/8031340296634183808/files/3da24033a2c54aed9aa97fe0a6be9e38:download",
+            "mimeType": "text/html",
+            "name": "projects/8031340296634183808/screens/3da24033a2c54aed9aa97fe0a6be9e38/fileEntries/html"
+          },
+          "name": "projects/8031340296634183808/screens/3da24033a2c54aed9aa97fe0a6be9e38",
+          "screenType": "DESIGN",
+          "screenshot": {
+            "downloadUrl": "https://stitch.googleapis.com/v1/projects/8031340296634183808/files/screenshot_00065f2376e8fb2d02dea64d321c975b:download",
+            "mimeType": "image/png",
+            "name": "projects/8031340296634183808/screens/3da24033a2c54aed9aa97fe0a6be9e38/fileEntries/screenshot"
+          },
+          "title": "Mi Riego - Don Alberto (Modo Campo Accesible)",
+          "width": "780"
+        }
+      }
+    }
+  },
+  "2c755cc480cd433b986eac02e93f5649": {
+    "slug": "02-menu-de-tramites",
+    "title": "Menú de Trámites - AgroMendoza",
+    "response": {
+      "id": 2,
+      "jsonrpc": "2.0",
+      "result": {
+        "content": [
+          {
+            "text": "{\"name\":\"projects/8031340296634183808/screens/2c755cc480cd433b986eac02e93f5649\",\"title\":\"Menú de Trámites - AgroMendoza (Nítido)\",\"screenshot\":{\"name\":\"projects/8031340296634183808/screens/2c755cc480cd433b986eac02e93f5649/fileEntries/screenshot\",\"downloadUrl\":\"https://stitch.googleapis.com/v1/projects/8031340296634183808/files/screenshot_00065f238f1639fc07c4ed533a299a44:download\",\"mimeType\":\"image/png\"},\"htmlCode\":{\"name\":\"projects/8031340296634183808/screens/2c755cc480cd433b986eac02e93f5649/fileEntries/html\",\"downloadUrl\":\"https://stitch.googleapis.com/v1/projects/8031340296634183808/files/2c755cc480cd433b986eac02e93f5649:download\",\"mimeType\":\"text/html\"},\"width\":\"780\",\"height\":\"1768\",\"deviceType\":\"MOBILE\",\"screenType\":\"DESIGN\"}",
+            "type": "text"
+          }
+        ],
+        "structuredContent": {
+          "deviceType": "MOBILE",
+          "height": "1768",
+          "htmlCode": {
+            "downloadUrl": "https://stitch.googleapis.com/v1/projects/8031340296634183808/files/2c755cc480cd433b986eac02e93f5649:download",
+            "mimeType": "text/html",
+            "name": "projects/8031340296634183808/screens/2c755cc480cd433b986eac02e93f5649/fileEntries/html"
+          },
+          "name": "projects/8031340296634183808/screens/2c755cc480cd433b986eac02e93f5649",
+          "screenType": "DESIGN",
+          "screenshot": {
+            "downloadUrl": "https://stitch.googleapis.com/v1/projects/8031340296634183808/files/screenshot_00065f238f1639fc07c4ed533a299a44:download",
+            "mimeType": "image/png",
+            "name": "projects/8031340296634183808/screens/2c755cc480cd433b986eac02e93f5649/fileEntries/screenshot"
+          },
+          "title": "Menú de Trámites - AgroMendoza (Nítido)",
+          "width": "780"
+        }
+      }
+    }
+  },
+  "4e02b5485fc24ce6b92651db4a46befa": {
+    "slug": "03-reportar-problema-agua",
+    "title": "Reportar Problema con el Agua - AgroMendoza",
+    "response": {
+      "id": 3,
+      "jsonrpc": "2.0",
+      "result": {
+        "content": [
+          {
+            "text": "{\"name\":\"projects/8031340296634183808/screens/4e02b5485fc24ce6b92651db4a46befa\",\"title\":\"Reportar Problema con el Agua - AgroMendoza\",\"screenshot\":{\"name\":\"projects/8031340296634183808/files/6127256342300048339\",\"downloadUrl\":\"https://stitch.googleapis.com/v1/projects/8031340296634183808/files/6127256342300048339:download\",\"mimeType\":\"image/jpeg\"},\"htmlCode\":{\"name\":\"projects/8031340296634183808/files/5754380810795696420\",\"downloadUrl\":\"https://stitch.googleapis.com/v1/projects/8031340296634183808/files/5754380810795696420:download\",\"mimeType\":\"text/html\"},\"width\":\"780\",\"height\":\"1768\",\"deviceType\":\"MOBILE\",\"screenType\":\"DESIGN\"}",
+            "type": "text"
+          }
+        ],
+        "structuredContent": {
+          "deviceType": "MOBILE",
+          "height": "1768",
+          "htmlCode": {
+            "downloadUrl": "https://stitch.googleapis.com/v1/projects/8031340296634183808/files/5754380810795696420:download",
+            "mimeType": "text/html",
+            "name": "projects/8031340296634183808/files/5754380810795696420"
+          },
+          "name": "projects/8031340296634183808/screens/4e02b5485fc24ce6b92651db4a46befa",
+          "screenType": "DESIGN",
+          "screenshot": {
+            "downloadUrl": "https://stitch.googleapis.com/v1/projects/8031340296634183808/files/6127256342300048339:download",
+            "mimeType": "image/jpeg",
+            "name": "projects/8031340296634183808/files/6127256342300048339"
+          },
+          "title": "Reportar Problema con el Agua - AgroMendoza",
+          "width": "780"
+        }
+      }
+    }
+  },
+  "eaa93ed80f6f40fb95cc70599255941b": {
+    "slug": "04-modo-campo-turno-actual-tomero",
+    "title": "Modo Campo - Turno Actual (Tomero)",
+    "response": {
+      "id": 4,
+      "jsonrpc": "2.0",
+      "result": {
+        "content": [
+          {
+            "text": "{\"name\":\"projects/8031340296634183808/screens/eaa93ed80f6f40fb95cc70599255941b\",\"title\":\"Modo Campo - Turno Actual (Tomero Accesible)\",\"screenshot\":{\"name\":\"projects/8031340296634183808/screens/eaa93ed80f6f40fb95cc70599255941b/fileEntries/screenshot\",\"downloadUrl\":\"https://stitch.googleapis.com/v1/projects/8031340296634183808/files/screenshot_00065f235e6ca1990576322a9e12373a:download\",\"mimeType\":\"image/png\"},\"htmlCode\":{\"name\":\"projects/8031340296634183808/screens/eaa93ed80f6f40fb95cc70599255941b/fileEntries/html\",\"downloadUrl\":\"https://stitch.googleapis.com/v1/projects/8031340296634183808/files/eaa93ed80f6f40fb95cc70599255941b:download\",\"mimeType\":\"text/html\"},\"width\":\"780\",\"height\":\"1768\",\"deviceType\":\"MOBILE\",\"screenType\":\"DESIGN\"}",
+            "type": "text"
+          }
+        ],
+        "structuredContent": {
+          "deviceType": "MOBILE",
+          "height": "1768",
+          "htmlCode": {
+            "downloadUrl": "https://stitch.googleapis.com/v1/projects/8031340296634183808/files/eaa93ed80f6f40fb95cc70599255941b:download",
+            "mimeType": "text/html",
+            "name": "projects/8031340296634183808/screens/eaa93ed80f6f40fb95cc70599255941b/fileEntries/html"
+          },
+          "name": "projects/8031340296634183808/screens/eaa93ed80f6f40fb95cc70599255941b",
+          "screenType": "DESIGN",
+          "screenshot": {
+            "downloadUrl": "https://stitch.googleapis.com/v1/projects/8031340296634183808/files/screenshot_00065f235e6ca1990576322a9e12373a:download",
+            "mimeType": "image/png",
+            "name": "projects/8031340296634183808/screens/eaa93ed80f6f40fb95cc70599255941b/fileEntries/screenshot"
+          },
+          "title": "Modo Campo - Turno Actual (Tomero Accesible)",
+          "width": "780"
+        }
+      }
+    }
+  },
+  "55dcc4a8788c4cbe8e8acd99fc8f3d43": {
+    "slug": "05-renovacion-rut-express",
+    "title": "Renovación RUT Express - AgroMendoza",
+    "response": {
+      "id": 5,
+      "jsonrpc": "2.0",
+      "result": {
+        "content": [
+          {
+            "text": "{\"name\":\"projects/8031340296634183808/screens/55dcc4a8788c4cbe8e8acd99fc8f3d43\",\"title\":\"Renovación RUT Express - AgroMendoza\",\"screenshot\":{\"name\":\"projects/8031340296634183808/files/4578092495114927184\",\"downloadUrl\":\"https://stitch.googleapis.com/v1/projects/8031340296634183808/files/4578092495114927184:download\",\"mimeType\":\"image/jpeg\"},\"htmlCode\":{\"name\":\"projects/8031340296634183808/files/17100657020954016964\",\"downloadUrl\":\"https://stitch.googleapis.com/v1/projects/8031340296634183808/files/17100657020954016964:download\",\"mimeType\":\"text/html\"},\"width\":\"780\",\"height\":\"2240\",\"deviceType\":\"MOBILE\",\"screenType\":\"DESIGN\"}",
+            "type": "text"
+          }
+        ],
+        "structuredContent": {
+          "deviceType": "MOBILE",
+          "height": "2240",
+          "htmlCode": {
+            "downloadUrl": "https://stitch.googleapis.com/v1/projects/8031340296634183808/files/17100657020954016964:download",
+            "mimeType": "text/html",
+            "name": "projects/8031340296634183808/files/17100657020954016964"
+          },
+          "name": "projects/8031340296634183808/screens/55dcc4a8788c4cbe8e8acd99fc8f3d43",
+          "screenType": "DESIGN",
+          "screenshot": {
+            "downloadUrl": "https://stitch.googleapis.com/v1/projects/8031340296634183808/files/4578092495114927184:download",
+            "mimeType": "image/jpeg",
+            "name": "projects/8031340296634183808/files/4578092495114927184"
+          },
+          "title": "Renovación RUT Express - AgroMendoza",
+          "width": "780"
+        }
+      }
+    }
+  }
+}
